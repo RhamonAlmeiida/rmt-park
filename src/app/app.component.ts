@@ -17,4 +17,14 @@ export class AppComponent {
   redirecionarHome() {
     this.router.navigate(['/vagas']);
   }
+
+
+
+
+
+
+
+
+
+  
 }
