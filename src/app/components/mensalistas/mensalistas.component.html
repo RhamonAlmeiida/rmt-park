@@ -1,1 +1,28 @@
-<p>mensalistas works!</p>
+<p-toast></p-toast>
+
+
+
+<div class="card">
+    <p-table [value]="mensalistas" [tableStyle]="{ 'min-width': '50rem' }">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Carro</th>
+          <th>Placa</th>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="body" let-mensalista>
+        <tr>
+          <td>{{ mensalista.id }}</td>
+          <td>{{ mensalista.nome }}</td>
+          <td>{{ mensalista.veiculo }}</td>
+          <td>{{ mensalista.placa }}</td>
+        </tr>
+      </ng-template>
+      
+    </p-table>
+  </div>
+  

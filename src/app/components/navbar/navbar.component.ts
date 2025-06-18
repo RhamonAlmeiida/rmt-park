@@ -30,7 +30,7 @@ export class NavbarComponent {
       {
         label: 'Home',
         icon: 'pi pi-home',
-        command: () => this.navegar("/")
+        command: () => this.navegar("/vagas")
       },
       {
         label: 'Mensalistas',
@@ -49,7 +49,6 @@ export class NavbarComponent {
       }
     ];
   }
-
   private navegar(caminho: string) {
     this.router.navigate([caminho]);
   }

@@ -15,9 +15,8 @@ export class AppComponent {
   constructor(private router: Router) { }
 
   redirecionarHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/vagas']);
   }
-
   redirecionarVagas() {
     this.router.navigate(["/vagas"])
   }

@@ -12,46 +12,57 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @Component({
   selector: 'app-vaga-lista',
   imports: [
-  CommonModule,
-  ButtonModule,
-  TableModule,
-  ToastModule,
-  ConfirmDialogModule],
+    CommonModule,
+    ButtonModule,
+    TableModule,
+    ToastModule,
+    ConfirmDialogModule
+  ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './vaga-lista.component.html',
-  styleUrl: './vaga-lista.component.scss'
+  styleUrls: ['./vaga-lista.component.scss']
 })
-export class VagaListaComponent implements OnInit{
-  vagas: Array<Vaga>;
+export class VagaListaComponent implements OnInit {
   carregandoVagas?: boolean;
 
-  constructor(
-    private router: Router,                           
-    private confirmationService: ConfirmationService, 
-    private messageService: MessageService,           
-    private vagaService: VagaService,  
-  ){
-    this.vagas = []
-  }
+  vagas: Array<Vaga> = [
+    new Vaga(1, 'ABC-1234', 'Carro', new Date('2025-06-18T08:30:00')),
+    new Vaga(2, 'XYZ-5678', 'Moto', new Date('2025-06-18T09:15:00')),
+    new Vaga(3, 'DEF-4321', 'Carro', new Date('2025-06-17T18:45:00')),
+    new Vaga(4, 'JKL-9876', 'Caminhão', new Date('2025-06-18T07:00:00'))
+  ];
+  
 
-  ngOnInit(): void {
+
+
+  constructor(
+    private router: Router,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private vagaService: VagaService,
+  ) {}
+
+  ngOnInit() {
     this.carregarVagas();
   }
 
-  private carregarVagas(){
+  private carregarVagas() {
     this.carregandoVagas = true;
     this.vagaService.obterTodos().subscribe({
       next: vagas => this.vagas = vagas,
-      error: erro => console.log("Ocorreu um erro ao carregar a lista de vagas:" +erro),
+      error: erro => {
+        console.error("Erro ao carregar vagas:", erro);
+        this.carregandoVagas = false;
+      },
       complete: () => this.carregandoVagas = false
     });
   }
 
   redirecionarPaginaCadastro() {
-    this.router.navigate(["/vagas/cadastro"]);
+    this.router.navigate(['/vagas/cadastro']);
   }
 
-  confirmaSaida(event: Event, id: number){
+  confirmaSaida(event: Event, id: number) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Deseja realmente registrar a Saída?',
@@ -59,33 +70,31 @@ export class VagaListaComponent implements OnInit{
       closable: true,
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
-
       rejectButtonProps: {
-        label: 'Cancel',
+        label: 'Cancelar',
         severity: 'secondary',
         outlined: true,
       },
       acceptButtonProps: {
-        label: 'Saída' ,
+        label: 'Saída',
       },
-      accept: () => this.saida(id)
+      accept: () => this.saida(id),
     });
   }
 
   private saida(id: number) {
     this.vagaService.saida(id).subscribe({
       next: () => this.apresentarMensagemSaida(),
-      error: erro => console.log(`Ocorreu um erro ao dar saida no veículo: ${erro}`),
-    })
+      error: erro => console.error(`Erro ao registrar saída: ${erro}`),
+    });
   }
 
-  private apresentarMensagemSaida(){
+  private apresentarMensagemSaida() {
     this.messageService.add({
       severity: 'success',
-      summary: 'sucesso',
+      summary: 'Sucesso',
       detail: 'Veículo saiu com sucesso',
     });
     this.carregarVagas();
   }
-
 }
