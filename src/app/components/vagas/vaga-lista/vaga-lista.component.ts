@@ -19,7 +19,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   ConfirmDialogModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './vaga-lista.component.html',
-  styleUrl: './vaga-lista.component.css'
+  styleUrl: './vaga-lista.component.scss'
 })
 export class VagaListaComponent implements OnInit{
   vagas: Array<Vaga>;

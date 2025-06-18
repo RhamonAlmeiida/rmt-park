@@ -17,7 +17,7 @@ import { MegaMenuModule } from 'primeng/megamenu';
     MegaMenuModule,
   ],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css',
+  styleUrl: './navbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent {

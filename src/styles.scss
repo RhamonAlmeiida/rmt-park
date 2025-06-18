@@ -4,3 +4,6 @@ html {
         Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
+body {
+    background: light-dark(var(--p-surface-0), var(--p-surface-950));
+}

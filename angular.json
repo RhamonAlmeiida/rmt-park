@@ -5,7 +5,11 @@
   "projects": {
     "escola-ng": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -27,7 +31,7 @@
               }
             ],
             "styles": [
-              "src/styles.css",
+              "src/styles.scss",
               "node_modules/primeflex/primeflex.css",
               "node_modules/primeicons/primeicons.css"
             ],
@@ -87,7 +91,7 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }

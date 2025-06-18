@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-root',
   imports: [RouterOutlet, ButtonModule, NavbarComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'rmt-park';

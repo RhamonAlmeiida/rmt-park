@@ -9,10 +9,4 @@ import { providePrimeNG } from 'primeng/config';
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
 
-// providePrimeNG({
-//   theme: {
-//     preset: Aura,
-//     options: {
-//       darkModeSelector: '.rmt-park',
-//     }
-//  }) }
+

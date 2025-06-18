@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-configuracoes',
   imports: [],
   templateUrl: './configuracoes.component.html',
-  styleUrl: './configuracoes.component.css'
+  styleUrl: './configuracoes.component.scss'
 })
 export class ConfiguracoesComponent {
 

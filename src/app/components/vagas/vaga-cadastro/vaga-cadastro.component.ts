@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-vaga-cadastro',
   imports: [],
   templateUrl: './vaga-cadastro.component.html',
-  styleUrl: './vaga-cadastro.component.css'
+  styleUrl: './vaga-cadastro.component.scss'
 })
 export class VagaCadastroComponent {
 

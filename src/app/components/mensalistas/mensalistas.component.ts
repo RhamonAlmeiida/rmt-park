@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-mensalistas',
   imports: [],
   templateUrl: './mensalistas.component.html',
-  styleUrl: './mensalistas.component.css'
+  styleUrl: './mensalistas.component.scss'
 })
 export class MensalistasComponent {
 
