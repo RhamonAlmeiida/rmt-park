@@ -1,75 +1,91 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Table } from 'primeng/table';
+import { Vaga } from '../../../models/vaga';
+import { Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { VagaService } from '../../../services/vaga.service';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-vaga-lista',
-  imports: [CommonModule],
+  imports: [
+  CommonModule,
+  ButtonModule,
+  TableModule,
+  ToastModule,
+  ConfirmDialogModule],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './vaga-lista.component.html',
-  styleUrls: ['./vaga-lista.component.css'] // <-- aqui estava "styleUrl", o correto é "styleUrls" (plural)
+  styleUrl: './vaga-lista.component.css'
 })
-export class VagaListaComponent implements OnInit {
-  customers!: Customer[];
-  representatives!: Representative[];
-  statuses!: any[];
-  loading: boolean = true;
-  activityValues: number[] = [0, 100];
-  searchValue: string | undefined;
+export class VagaListaComponent implements OnInit{
+  vagas: Array<Vaga>;
+  carregandoVagas?: boolean;
 
-  constructor(private customerService: CustomerService) {}
+  constructor(
+    private router: Router,                           
+    private confirmationService: ConfirmationService, 
+    private messageService: MessageService,           
+    private vagaService: VagaService,  
+  ){
+    this.vagas = []
+  }
 
-  ngOnInit() {
-    this.customerService.getCustomersLarge().then((customers) => {
-      this.customers = customers;
-      this.loading = false;
+  ngOnInit(): void {
+    this.carregarVagas();
+  }
 
-      this.customers.forEach((customer) => {
-        customer.date = new Date(<Date>customer.date);
-      });
+  private carregarVagas(){
+    this.carregandoVagas = true;
+    this.vagaService.obterTodos().subscribe({
+      next: vagas => this.vagas = vagas,
+      error: erro => console.log("Ocorreu um erro ao carregar a lista de vagas:" +erro),
+      complete: () => this.carregandoVagas = false
     });
-
-    this.representatives = [
-      { name: 'Amy Elsner', image: 'amyelsner.png' },
-      { name: 'Anna Fali', image: 'annafali.png' },
-      { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-      { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-      { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-      { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-      { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-      { name: 'Onyama Limba', image: 'onyamalimba.png' },
-      { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-      { name: 'Xuxue Feng', image: 'xuxuefeng.png' }
-    ];
-
-    this.statuses = [
-      { label: 'Unqualified', value: 'unqualified' },
-      { label: 'Qualified', value: 'qualified' },
-      { label: 'New', value: 'new' },
-      { label: 'Negotiation', value: 'negotiation' },
-      { label: 'Renewal', value: 'renewal' },
-      { label: 'Proposal', value: 'proposal' }
-    ];
   }
 
-  clear(table: Table) {
-    table.clear();
-    this.searchValue = '';
+  redirecionarPaginaCadastro() {
+    this.router.navigate(["/vagas/cadastro"]);
   }
 
-  getSeverity(status: string) {
-    switch (status.toLowerCase()) {
-      case 'unqualified':
-        return 'danger';
-      case 'qualified':
-        return 'success';
-      case 'new':
-        return 'info';
-      case 'negotiation':
-        return 'warn';
-      case 'renewal':
-        return null;
-      default:
-        return null;
-    }
+  confirmaSaida(event: Event, id: number){
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Deseja realmente registrar a Saída?',
+      header: 'CUIDADO',
+      closable: true,
+      closeOnEscape: true,
+      icon: 'pi pi-exclamation-triangle',
+
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Saída' ,
+      },
+      accept: () => this.saida(id)
+    });
   }
+
+  private saida(id: number) {
+    this.vagaService.saida(id).subscribe({
+      next: () => this.apresentarMensagemSaida(),
+      error: erro => console.log(`Ocorreu um erro ao dar saida no veículo: ${erro}`),
+    })
+  }
+
+  private apresentarMensagemSaida(){
+    this.messageService.add({
+      severity: 'success',
+      summary: 'sucesso',
+      detail: 'Veículo saiu com sucesso',
+    });
+    this.carregarVagas();
+  }
+
 }
