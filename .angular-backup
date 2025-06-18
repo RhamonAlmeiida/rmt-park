@@ -1,6 +1,7 @@
-# Criar arquivo 'angular.ps1' no mesmo diretório
-# Executar no PowerShell com:
+# Criar arquivo angular.ps1' no mesmo diretório que tem angular.ps1
+# Executar no power shell
 # powershell -ExecutionPolicy Bypass -File .\angular.ps1
+
 
 # Verifica se Node.js está instalado
 if (!(Get-Command node -ErrorAction SilentlyContinue)) {
@@ -40,6 +41,7 @@ if (!(Get-Command ng -ErrorAction SilentlyContinue)) {
     Write-Host "O comando 'ng' não foi encontrado. Tentando corrigir PATH..." -ForegroundColor Yellow
     Add-ToUserPath $npmGlobalBin
 
+    # Tenta encontrar ng manualmente e informar o caminho
     $ngPath = Join-Path $npmGlobalBin "ng.cmd"
     if (Test-Path $ngPath) {
         Write-Host "Angular CLI está instalado em: $ngPath" -ForegroundColor Cyan
@@ -62,7 +64,4 @@ if (Test-Path "./package.json") {
     Write-Host "Nenhum package.json encontrado no diretório atual. Ignorando 'npm install'." -ForegroundColor Yellow
 }
 
-# Instala PrimeNG, PrimeIcons e PrimeFlex
-Write-Host "Instalando PrimeNG, PrimeIcons e PrimeFlex..." -ForegroundColor Cyan
-npm install primeng primeicons primeflex
-Write-Host "Instalação de PrimeNG, PrimeIcons e PrimeFlex concluída." -ForegroundColor Green
+
