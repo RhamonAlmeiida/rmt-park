@@ -39,12 +39,12 @@ export class NavbarComponent {
       },
       {
         label: 'Relatórios e Pagamentos',
-        icon: '',
+        icon: 'pi pi-file',
         command: () => this.navegar("/relatorios")
       },
       {
         label: 'Configurações',
-        icon: '',
+        icon: 'pi pi-wrench',
         command: () => this.navegar("/configuracoes")
       }
     ];
