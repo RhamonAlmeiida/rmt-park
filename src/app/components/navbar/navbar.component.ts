@@ -30,22 +30,22 @@ export class NavbarComponent {
       {
         label: 'Home',
         icon: 'pi pi-home',
-        command: () => this.navegar("/vagas")
+        command: () => this.navegar("/")
       },
       {
         label: 'Mensalistas',
         icon: '',
-        command: () => this.navegar("/")
+        command: () => this.navegar("/mensalistas")
       },
       {
         label: 'Relatórios e Pagamentos',
         icon: '',
-        command: () => this.navegar("/")
+        command: () => this.navegar("/relatorios")
       },
       {
         label: 'Configurações',
         icon: '',
-        command: () => this.navegar("/")
+        command: () => this.navegar("/configuracoes")
       }
     ];
   }
