@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-vaga-lista',
@@ -16,7 +17,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     ButtonModule,
     TableModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    TagModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './vaga-lista.component.html',

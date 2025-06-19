@@ -7,11 +7,11 @@
         <ng-template #start>
         </ng-template>
         <ng-template #item let-item>
-            <a *ngIf="item.root" pRipple class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 3rem">
+            <a *ngIf="item.root" pRipple class="flex items-center cursor-pointer overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 3rem">
                 <i [ngClass]="item.icon"></i>
                 <span class="ml-2">{{ item.label }}</span>
             </a>
-            <a *ngIf="!item.root && !item.image" class="flex items-center p-4 cursor-pointer mb-2 gap-2">
+            <a *ngIf="!item.root && !item.image" class="flex items-center p-2 cursor-pointer mb-2 gap-2">
                 <span class="inline-flex items-center justify-center rounded-full ">
                     <i [ngClass]="item.icon + ' text-lg'"></i>
                 </span>

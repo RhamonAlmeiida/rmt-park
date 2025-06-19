@@ -3,10 +3,11 @@
 
 <div class="card">
   <div class="flex justify-content-end mb-2">
-    <button pButton label="Nova entrada" icon="pi pi-plus" (click)="redirecionarPaginaCadastro()" class="p-button-info"></button>
+    <button pButton label="Nova entrada" icon="pi pi-plus" (click)="redirecionarPaginaCadastro()"
+      class="p-button-info"></button>
   </div>
 
-  <p-table [value]="vagas" dataKey="id" [loading]="carregandoVagas" showGridlines stripedRows [tableStyle]="{'min-width': '50rem'}">
+  <p-table [value]="vagas" dataKey="id" [loading]="carregandoVagas" [tableStyle]="{'min-width': '50rem'}">
     <ng-template pTemplate="header">
       <tr>
         <th>Código</th>
@@ -21,10 +22,19 @@
       <tr>
         <td>{{ vaga.id }}</td>
         <td>{{ vaga.placa }}</td>
-        <td>{{ vaga.tipo }}</td>
-        <td>{{ vaga.dataHora | date:'short' }}</td>
         <td>
-          <button pButton icon="pi pi-sign-out" label="Registrar Saída" severity="danger" (click)="confirmaSaida($event, vaga.id)"></button>
+          @if(vaga.tipo == "Caminhão"){
+          <p-tag severity="secondary" value="{{ vaga.tipo }}" />
+          }@else{
+          <p-tag severity="error" value="{{ vaga.tipo }}" />
+          }
+        </td>
+        <td>
+          {{ vaga.dataHora | date:'short' }}
+        </td>
+        <td>
+          <button pButton icon="pi pi-sign-out" label="Registrar Saída" severity="danger"
+            (click)="confirmaSaida($event, vaga.id)"></button>
         </td>
       </tr>
     </ng-template>
