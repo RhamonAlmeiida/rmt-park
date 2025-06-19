@@ -9,16 +9,22 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
+import { VagaCadastro } from '../../../models/vaga-cadastro';
+import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-vaga-lista',
+  standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ButtonModule,
     TableModule,
     ToastModule,
     ConfirmDialogModule,
     TagModule,
+    DialogModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './vaga-lista.component.html',
@@ -26,23 +32,21 @@ import { TagModule } from 'primeng/tag';
 })
 export class VagaListaComponent implements OnInit {
   carregandoVagas?: boolean;
+  vagaCadastro: VagaCadastro;
+  dialogVisivelCadastrar: boolean = false;
+  dialogTituloCadastrar?: string;
+  dataHora?: Date;
 
-  vagas: Array<Vaga> = [
-    new Vaga(1, 'ABC-1234', 'Carro', new Date('2025-06-18T08:30:00')),
-    new Vaga(2, 'XYZ-5678', 'Moto', new Date('2025-06-18T09:15:00')),
-    new Vaga(3, 'DEF-4321', 'Carro', new Date('2025-06-17T18:45:00')),
-    new Vaga(4, 'JKL-9876', 'Caminhão', new Date('2025-06-18T07:00:00'))
-  ];
-  
-
-
+  vagas: Array<Vaga> = [];
 
   constructor(
     private router: Router,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private vagaService: VagaService,
-  ) {}
+  ) {
+    this.vagaCadastro = new VagaCadastro();
+  }
 
   ngOnInit() {
     this.carregarVagas();
@@ -51,7 +55,12 @@ export class VagaListaComponent implements OnInit {
   private carregarVagas() {
     this.carregandoVagas = true;
     this.vagaService.obterTodos().subscribe({
-      next: vagas => this.vagas = vagas,
+      next: vagas => {
+        this.vagas = vagas.map(v => ({
+          ...v,
+          dataHora: new Date(v.dataHora)
+        }));
+      },
       error: erro => {
         console.error("Erro ao carregar vagas:", erro);
         this.carregandoVagas = false;
@@ -60,8 +69,11 @@ export class VagaListaComponent implements OnInit {
     });
   }
 
-  redirecionarPaginaCadastro() {
-    this.router.navigate(['/vagas/cadastro']);
+  abrirModalCadastrar() {
+    this.dialogTituloCadastrar = "Cadastro de Vaga";
+    this.vagaCadastro = new VagaCadastro();
+    this.vagaCadastro.dataHora = new Date();
+    this.dialogVisivelCadastrar = true;
   }
 
   confirmaSaida(event: Event, id: number) {
@@ -84,8 +96,8 @@ export class VagaListaComponent implements OnInit {
     });
   }
 
-  private saida(id: number) {
-    this.vagaService.saida(id).subscribe({
+  private saida(vagaId: number) {
+    this.vagaService.saida(vagaId).subscribe({
       next: () => this.apresentarMensagemSaida(),
       error: erro => console.error(`Erro ao registrar saída: ${erro}`),
     });
@@ -98,5 +110,23 @@ export class VagaListaComponent implements OnInit {
       detail: 'Veículo saiu com sucesso',
     });
     this.carregarVagas();
+  }
+
+  cadastrar() {
+    this.vagaService.cadastrar(this.vagaCadastro).subscribe({
+      next: vaga => this.apresentarmensagemCadastrado(),
+      error: erro => console.log("Ocorreu um erro ao cadastrar o veiculo:" + erro),
+    });
+  }
+
+  apresentarmensagemCadastrado() {
+    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Veiculo cadastrado com sucesso' });
+    this.dialogVisivelCadastrar = false;
+    this.vagaCadastro = new VagaCadastro();
+    this.carregarVagas();
+  }
+
+  salvar() {
+    this.cadastrar();
   }
 }

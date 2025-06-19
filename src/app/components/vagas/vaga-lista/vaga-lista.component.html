@@ -3,8 +3,10 @@
 
 <div class="card">
   <div class="flex justify-content-end mb-2">
-    <button pButton label="Nova entrada" icon="pi pi-plus" (click)="redirecionarPaginaCadastro()"
+    <button pButton label="Nova entrada" icon="pi pi-plus" (click)="abrirModalCadastrar()"
       class="p-button-info"></button>
+
+        
   </div>
 
   <p-table [value]="vagas" dataKey="id" [loading]="carregandoVagas" [tableStyle]="{'min-width': '50rem'}">
@@ -23,10 +25,12 @@
         <td>{{ vaga.id }}</td>
         <td>{{ vaga.placa }}</td>
         <td>
-          @if(vaga.tipo == "Caminhão"){
-          <p-tag severity="secondary" value="{{ vaga.tipo }}" />
+          @if(vaga.tipo == "Mensalista"){
+            <p-tag severity="error" value="{{ vaga.tipo }}"
+           />
           }@else{
-          <p-tag severity="error" value="{{ vaga.tipo }}" />
+            <p-tag severity="secondary" value="{{ vaga.tipo }}"
+           />
           }
         </td>
         <td>
@@ -39,4 +43,52 @@
       </tr>
     </ng-template>
   </p-table>
+</div>
+
+<div class="card flex justify-center">
+  <p-dialog maskStyleClass="backdrop-blur-sm" [(visible)]="dialogVisivelCadastrar" styleClass="!border-0 !bg-transparent">
+    <ng-template #headless>
+      <div class="flex flex-col px-8 py-8 gap-6 rounded-2xl"
+        style="border-radius: 12px; background-image: radial-gradient(circle at left top, var(--p-primary-400), var(--p-primary-700))">
+        
+        <div class="inline-flex flex-col gap-2">
+          <label for="campo-placa" class="text-primary-50 font-semibold">Placa</label>
+          <input pInputText id="campo-placa" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80" [(ngModel)]="vagaCadastro.placa" />
+        </div>
+
+        <div class="inline-flex flex-col gap-2">
+          <label for="campo-tipo" class="text-primary-50 font-semibold">Tipo</label>
+          <input pInputText id="campo-tipo" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80" [(ngModel)]="vagaCadastro.tipo" />
+        </div>
+
+        <div class="inline-flex flex-col gap-2">
+          <label for="campo-data" class="text-primary-50 font-semibold">Data/Hora</label>
+          <input
+            pInputText
+            id="campo-data"
+            class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+            [value]="vagaCadastro.dataHora | date: 'short'"
+            readonly
+          />
+        </div>
+
+        <div class="flex items-center gap-4">
+          <p-button
+            label="Cancelar"
+            (click)="dialogVisivelCadastrar = false"
+            [text]="true"
+            styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+            class="w-full"
+          ></p-button>
+          <p-button
+            label="Salvar"
+            (click)="salvar()"
+            [text]="true"
+            styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+            class="w-full"
+          ></p-button>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>

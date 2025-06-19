@@ -2,6 +2,7 @@ import { Vaga } from './vaga';
 
 describe('Vaga', () => {
   it('should create an instance', () => {
-    expect(new Vaga()).toBeTruthy();
+    const vaga = new Vaga(1, 'ABC-1234', 'Mensalista', new Date());
+    expect(vaga).toBeTruthy();
   });
 });
