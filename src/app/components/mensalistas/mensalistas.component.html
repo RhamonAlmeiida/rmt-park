@@ -2,15 +2,16 @@
 
 
 
-<div class="card">
-    <p-table [value]="mensalistas" [tableStyle]="{ 'min-width': '50rem' }">
+<div class="card  " >
+    <p-table [value]="mensalistas" [tableStyle]="{ 'min-width': '50rem' } " class="p-4" >
       
       <ng-template pTemplate="header">
         <tr>
-          <th>ID</th>
+          <th>id</th>
           <th>Nome</th>
           <th>Carro</th>
           <th>Placa</th>
+          <th>Vencimento Plano</th>
         </tr>
       </ng-template>
       
@@ -20,6 +21,7 @@
           <td>{{ mensalista.nome }}</td>
           <td>{{ mensalista.veiculo }}</td>
           <td>{{ mensalista.placa }}</td>
+          <td>   </td>
         </tr>
       </ng-template>
       
