@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Mensalista } from '../models/mensalista';
+import { Mensalista } from '../models/mensalista-cadastro';
 
 @Injectable()
 export class MensalistaService {
