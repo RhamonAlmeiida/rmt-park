@@ -11,8 +11,8 @@
     
 
 <div class="card flex justify-center">
-    <p-button (click)="abrirModalCadastrarMensalista()" label="Show" />
-    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <p-button (click)="abrirModalCadastrarMensalista()" label="Novo Mensalista" />
+    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="dialogVisivelCadastrarMensalista" [style]="{ width: '25rem' }">
 
  <div class="inline-flex flex-col gap-2">
           <label for="campo-placa" class="text-primary-50 font-semibold">Placa</label>
