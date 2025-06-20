@@ -65,8 +65,8 @@ export class MensalistasComponent implements OnInit {
   }
 
   private carregarMensalistas() {
-     this.carregandoMensalista = true;
-     this.mensalistaService.obterTodos().subscribe({
+    this.carregandoMensalista = true;
+    this.mensalistaService.obterTodos().subscribe({
       next: () => this.apresentarmensagemApagado(),
       error: erro => console.error(`Erro ao apagar mensalista: ${erro}`),
     });
@@ -98,23 +98,23 @@ export class MensalistasComponent implements OnInit {
     });
   }
 
-  private apagar(mensalistaId: number){
+  private apagar(mensalistaId: number) {
     this.mensalistaService.apagar(mensalistaId).subscribe({
       next: () => this.apresentarmensagemApagado(),
       error: erro => console.error(`Erro ao apagar mensalista: ${erro}`),
     });
   }
 
-  private apresentarmensagemApagado(){
+  private apresentarmensagemApagado() {
     this.messageService.add({
-      severity: 'success' ,
+      severity: 'success',
       summary: 'Sucesso',
       detail: 'Mensalista apagado com sucesso',
     });
     this.carregarMensalistas();
   }
 
-  cadastrar(){
+  cadastrar() {
     this.mensalistaService.cadastrar(this.mensalistaCadastro).subscribe({
       next: mensalista => this.apresentarmensagemCadastrado(),
       error: erro => console.log(" Ocorreu um erro ao cadastar mensalista:" + erro),
