@@ -127,6 +127,9 @@ export class VagaListaComponent implements OnInit {
   }
 
   salvar() {
-    this.cadastrar();
+    this.vagas.push({ ...this.vagaCadastro });
+    this.apresentarmensagemCadastrado();
+    this.dialogVisivelCadastrar = false;
+    this.vagaCadastro = new VagaCadastro();
   }
 }
