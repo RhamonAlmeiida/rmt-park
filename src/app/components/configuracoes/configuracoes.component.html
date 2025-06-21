@@ -1,1 +1,85 @@
-<p>configuracoes works!</p>
+
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+
+<div class="card flex justify-center">
+    <p-button (click)="abrirModalCadastrarFuncionario()" label="Novo Funcionário" />
+    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="dialogVisivelCadastrarFuncionario"
+        [style]="{ width: '25rem' }">
+        <!-- Telefone  -->
+        <div class="inline-flex flex-col gap-2">
+            <label for="campo-telefone" class="text-primary-50 font-semibold">Telefone</label>
+            <input pInputText id="campo-telefone" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+                [(ngModel)]="funcionarios.telefone" />
+        </div>
+
+        <!-- Nome  -->
+        <div class="inline-flex flex-col gap-2">
+            <label for="campo-nome" class="text-primary-50 font-semibold">Nome</label>
+            <input pInputText id="campo-nome" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+                [(ngModel)]="funcionarios.nome" />
+        </div>
+
+        <!-- Sobrenome  -->
+        <div class="inline-flex flex-col gap-2">
+            <label for="campo-sobrenome" class="text-primary-50 font-semibold">Sobrenome</label>
+            <input pInputText id="campo-sobrenome" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+                [(ngModel)]="funcionarios.sobrenome" />
+        </div>
+
+        <!-- CPF  -->
+        <div class="inline-flex flex-col gap-2">
+            <label for="campo-cpf" class="text-primary-50 font-semibold">Cpf</label>
+            <input pInputText id="campo-cpf" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+                [(ngModel)]="funcionarios.cpf" />
+        </div>
+
+
+        <!-- Cargo  -->
+        <div class="inline-flex flex-col gap-2">
+            <label for="campo-cargo" class="text-primary-50 font-semibold">Cargo</label>
+            <input pInputText id="campo-cargo" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+                [(ngModel)]="funcionarios.cargo"  />
+        </div>
+
+
+        <!-- Admissão  -->
+        <div class="form-group">
+            <label for="campo-data-admissao">Data de Admissão</label>
+            <p-datepicker id="campo-data-admissao" [(ngModel)]="funcionarios.dataAdmissao" dateFormat="dd/mm/yy"
+                showIcon="true" appendTo="body"/>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+            <label for="campo-status">Status</label>
+            <p-dropdown id="campo-status" [options]="listaStatus" [(ngModel)]="funcionarios.listaStatus"
+                placeholder="Selecione o status" appendTo="body">
+            </p-dropdown>
+        </div>
+
+        <!-- Turno -->
+        <div class="form-group">
+            <label for="campo-turno">Turno</label>
+            <p-dropdown id="campo-turno" [options]="listaTurnos" [(ngModel)]="funcionarios.turno"
+                placeholder="Selecione o turno" appendTo="body">
+            </p-dropdown>
+        </div>
+
+
+
+
+        <div class="flex items-center gap-4">
+            <!-- Cancelar  -->
+            <p-button label="Cancelar" (click)="dialogVisivelCadastrarFuncionario = false" [text]="true"
+                styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+                class="w-full"></p-button>
+            <!-- Salvar  -->
+            <p-button label="Salvar" (click)="salvar()" [text]="true"
+                styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+                class="w-full"></p-button>
+        </div>
+    </p-dialog>
+</div>
