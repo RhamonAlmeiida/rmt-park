@@ -22,7 +22,7 @@ export class LoguinService {
 
   logout() {
     localStorage.removeItem('usuarioLogado');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/loguin']);
   }
 
   estaLogado(): boolean {

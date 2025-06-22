@@ -2,21 +2,32 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
-import { MegaMenuItem } from 'primeng/api';
+import { ConfirmationService, MegaMenuItem, MessageService } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
-import { MegaMenuModule } from 'primeng/megamenu';
+import { MegaMenu, MegaMenuModule } from 'primeng/megamenu';
 import { LoguinService } from '../../services/loguin.service';
+import { ToastModule } from 'primeng/toast';
+import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TagModule } from 'primeng/tag';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
-    ButtonModule,
     CommonModule,
-    AvatarModule,
-    RouterModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    ToastModule,
+    ConfirmDialogModule,
+    TagModule,
+    DialogModule,
     MegaMenuModule,
   ],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +40,8 @@ export class NavbarComponent {
 
   constructor(
     private router: Router,
-    private loguinService: LoguinService  
+    private loguinService: LoguinService ,
+    private messageservice: MessageService,
   ) { }
 
   ngOnInit() {
@@ -64,7 +76,7 @@ export class NavbarComponent {
       {
         label: 'Sair',
         icon: 'pi pi-sign-out',
-        command: () => this.logout()
+        command: () => this.apresentarMensagemDeslogado()
       },
     ];
   }
@@ -74,5 +86,17 @@ export class NavbarComponent {
 
   logout(){
     this.loguinService.logout();
+  }
+
+  private apresentarMensagemDeslogado(){
+     this.messageservice.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Deslogado com sucesso',
+      life: 1000
+    });
+    setTimeout(() => {
+      this.logout();
+    },1000);
   }
 }
