@@ -112,24 +112,41 @@ export class VagaListaComponent implements OnInit {
     this.carregarVagas();
   }
 
-  cadastrar() {
-    this.vagaService.cadastrar(this.vagaCadastro).subscribe({
-      next: vaga => this.apresentarmensagemCadastrado(),
-      error: erro => console.log("Ocorreu um erro ao cadastrar o veiculo:" + erro),
-    });
-  }
-
-  apresentarmensagemCadastrado() {
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Veiculo cadastrado com sucesso' });
-    this.dialogVisivelCadastrar = false;
-    this.vagaCadastro = new VagaCadastro();
-    this.carregarVagas();
+  private validarPlaca(placa: string): boolean {
+    const regexPlaca = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/;
+    return regexPlaca.test(placa);
   }
 
   salvar() {
+    const placaOriginal = this.vagaCadastro.placa ?? '';
+    const placa = placaOriginal.toUpperCase().trim();
+
+    if (placa.length !== 7 || !this.validarPlaca(placa)) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Placa inválida',
+        detail: 'A placa deve conter exatamente 7 caracteres e estar no formato: ABC1D23.',
+      });
+      return;
+    }
+
+    this.vagaCadastro.placa = placa;
     this.vagas.push({ ...this.vagaCadastro });
     this.apresentarmensagemCadastrado();
     this.dialogVisivelCadastrar = false;
     this.vagaCadastro = new VagaCadastro();
   }
+
+  apresentarmensagemCadastrado() {
+    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Veículo cadastrado com sucesso' });
+    this.dialogVisivelCadastrar = false;
+    this.vagaCadastro = new VagaCadastro();
+    this.carregarVagas();
+  }
+transformarPlacaParaMaiuscula(): void {
+  if (this.vagaCadastro.placa) {
+    this.vagaCadastro.placa = this.vagaCadastro.placa.toUpperCase();
+  }
+}
+
 }

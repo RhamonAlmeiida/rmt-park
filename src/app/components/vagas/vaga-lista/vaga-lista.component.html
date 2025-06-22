@@ -5,11 +5,9 @@
   <div class="flex justify-content-end mb-2">
     <button pButton label="Nova entrada" icon="pi pi-plus" (click)="abrirModalCadastrar()"
       class="p-button-info"></button>
-
-        
   </div>
 
-  <p-table [value]="vagas" dataKey="id" [loading]="carregandoVagas" [tableStyle]="{'min-width': '50rem'}">
+  <p-table [value]="vagas" dataKey="id" [loading]="carregandoVagas" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th>Código</th>
@@ -25,17 +23,9 @@
         <td>{{ vaga.id }}</td>
         <td>{{ vaga.placa }}</td>
         <td>
-          @if(vaga.tipo == "Mensalista"){
-            <p-tag severity="error" value="{{ vaga.tipo }}"
-           />
-          }@else{
-            <p-tag severity="secondary" value="{{ vaga.tipo }}"
-           />
-          }
+          <p-tag [severity]="vaga.tipo === 'Mensalista' ? 'error' : 'secondary'" [value]="vaga.tipo"></p-tag>
         </td>
-        <td>
-          {{ vaga.dataHora | date:'short' }}
-        </td>
+        <td>{{ vaga.dataHora | date: 'short' }}</td>
         <td>
           <button pButton icon="pi pi-sign-out" label="Registrar Saída" severity="danger"
             (click)="confirmaSaida($event, vaga.id)"></button>
@@ -45,50 +35,46 @@
   </p-table>
 </div>
 
-<div class="card flex justify-center">
-  <p-dialog maskStyleClass="backdrop-blur-sm" [(visible)]="dialogVisivelCadastrar" styleClass="!border-0 !bg-transparent">
-    <ng-template #headless>
-      <div class="flex flex-col px-8 py-8 gap-6 rounded-2xl"
-        style="border-radius: 12px; background-image: radial-gradient(circle at left top, var(--p-primary-400), var(--p-primary-700))">
-        
-        <div class="inline-flex flex-col gap-2">
-          <label for="campo-placa" class="text-primary-50 font-semibold">Placa</label>
-          <input pInputText id="campo-placa" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80" [(ngModel)]="vagaCadastro.placa" />
-        </div>
+<p-dialog
+  header="Nova Entrada"
+  [(visible)]="dialogVisivelCadastrar"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  styleClass="custom-dark-dialog"
+  [style]="{ width: '30vw' }"
+>
 
-        <div class="inline-flex flex-col gap-2">
-          <label for="campo-tipo" class="text-primary-50 font-semibold">Tipo</label>
-          <input pInputText id="campo-tipo" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80" [(ngModel)]="vagaCadastro.tipo" />
-        </div>
 
-        <div class="inline-flex flex-col gap-2">
-          <label for="campo-data" class="text-primary-50 font-semibold">Data/Hora</label>
-          <input
-            pInputText
-            id="campo-data"
-            class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
-            [value]="vagaCadastro.dataHora | date: 'short'"
-            readonly
-          />
-        </div>
+ <div class="form-container">
 
-        <div class="flex items-center gap-4">
-          <p-button
-            label="Cancelar"
-            (click)="dialogVisivelCadastrar = false"
-            [text]="true"
-            styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
-            class="w-full"
-          ></p-button>
-          <p-button
-            label="Salvar"
-            (click)="salvar()"
-            [text]="true"
-            styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
-            class="w-full"
-          ></p-button>
-        </div>
-      </div>
-    </ng-template>
-  </p-dialog>
+<div>
+  <label for="placa">Placa:</label>
+  <input
+    id="placa"
+    pInputText
+    class="unput-dark"
+    [(ngModel)]="vagaCadastro.placa"
+    maxlength="7"
+    (input)="transformarPlacaParaMaiuscula()"
+    placeholder="ABC1D23"
+  />
 </div>
+
+    <div>
+      <label for="campo-tipo">Tipo : </label>
+      <input pInputText id="campo-tipo" class="input-dark" [(ngModel)]="vagaCadastro.tipo" />
+    </div>
+
+    <div>
+      <label for="campo-data">Data/Hora </label>
+      <input pInputText id="campo-data" class="input-dark" [value]="vagaCadastro.dataHora | date: 'short'" readonly />
+    </div>
+
+    <div class="footer-buttons">
+      <button pButton label="Cancelar" class="p-button-outlined p-button-secondary"
+        (click)="dialogVisivelCadastrar = false"></button>
+      <button pButton label="Salvar" class="p-button-success" (click)="salvar()"></button>
+    </div>
+  </div>
+</p-dialog>

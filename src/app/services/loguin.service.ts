@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,7 @@ export class LoguinService {
     senha: '123456'
   };
 
-  constructor(private router: Router) {}
+  constructor() {}
 
   loguin(email: string, senha: string): boolean {
     if (email === this.usuarioFake.email && senha === this.usuarioFake.senha) {
@@ -20,12 +19,11 @@ export class LoguinService {
     return false;
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('usuarioLogado');
-    this.router.navigate(['/loguin']);
   }
 
   estaLogado(): boolean {
-    return localStorage.getItem('usuarioLogado') !== null;
+    return !!localStorage.getItem('usuarioLogado');
   }
 }

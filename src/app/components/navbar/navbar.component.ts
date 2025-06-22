@@ -93,10 +93,11 @@ export class NavbarComponent {
       severity: 'success',
       summary: 'Sucesso',
       detail: 'Deslogado com sucesso',
-      life: 1000
     });
+
     setTimeout(() => {
       this.logout();
+      this.router.navigate(['/loguin']);
     },1000);
   }
 }
