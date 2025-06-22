@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, ButtonModule, NavbarComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -17,20 +18,20 @@ export class AppComponent {
   redirecionarHome() {
     this.router.navigate(['/vagas']);
   }
+
   redirecionarVagas() {
-    this.router.navigate(["/vagas"])
+    this.router.navigate(['/vagas']);
   }
+
   redirecionarMensalistas() {
-    this.router.navigate(["/mensalistas"])
+    this.router.navigate(['/mensalistas']);
   }
+
   redirecionarRelatorios() {
-    this.router.navigate(["/relatorios"])
+    this.router.navigate(['/relatorio']);
   }
 
-  
-
-
-
-
-
+  mostrarNavbar(): boolean {
+    return this.router.url !== '/loguin';
+  }
 }

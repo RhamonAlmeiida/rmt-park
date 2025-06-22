@@ -5,6 +5,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { MegaMenuItem } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { MegaMenuModule } from 'primeng/megamenu';
+import { LoguinService } from '../../services/loguin.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,9 +24,22 @@ import { MegaMenuModule } from 'primeng/megamenu';
 export class NavbarComponent {
   items: MegaMenuItem[] = [];
 
-  constructor(private router: Router) { }
+  usuarioEmail: string = '';
+
+
+  constructor(
+    private router: Router,
+    private loguinService: LoguinService  
+  ) { }
 
   ngOnInit() {
+
+    const dados = localStorage.getItem('usuarioLogado');
+    if (dados) {
+      const usuario = JSON.parse(dados);
+      this.usuarioEmail = usuario.email;
+    }
+
     this.items = [
       {
         label: 'Home',
@@ -40,16 +54,25 @@ export class NavbarComponent {
       {
         label: 'Relatórios e Pagamentos',
         icon: 'pi pi-file',
-        command: () => this.navegar("/relatorios")
+        command: () => this.navegar("/relatorio")
       },
       {
         label: 'Configurações',
         icon: 'pi pi-wrench',
         command: () => this.navegar("/configuracoes")
-      }
+      },
+      {
+        label: 'Sair',
+        icon: 'pi pi-sign-out',
+        command: () => this.logout()
+      },
     ];
   }
   private navegar(caminho: string) {
     this.router.navigate([caminho]);
+  }
+
+  logout(){
+    this.loguinService.logout();
   }
 }

@@ -1,29 +1,35 @@
+<div class="card flex justify-content-center align-items-center">
+  <p-megamenu [model]="items">
+    <ng-template #start></ng-template>
 
+    <ng-template #item let-item>
+      <a *ngIf="item.root" pRipple
+        class="flex items-center cursor-pointer overflow-hidden relative font-semibold text-lg uppercase"
+        style="border-radius: 3rem" (click)="item.command && item.command()">
+        <i [ngClass]="item.icon"></i>
+        <span class="ml-2">{{ item.label }}</span>
+      </a>
 
-<div class="card flex justify-content-center align-items-center ">
-    <p-megamenu [model]="items"  >
-        <ng-template #start>
-        </ng-template>
-        <ng-template #item let-item>
-            <a *ngIf="item.root" pRipple class="flex items-center cursor-pointer overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 3rem">
-                <i [ngClass]="item.icon"></i>
-                <span class="ml-2">{{ item.label }}</span>
-            </a>
-            <a *ngIf="!item.root && !item.image" class="flex items-center p-2 cursor-pointer mb-2 gap-2">
-                <span class="inline-flex items-center justify-center rounded-full ">
-                    <i [ngClass]="item.icon + ' text-lg'"></i>
-                </span>
-                <span class="inline-flex flex-col gap-1">
-                    <span class="font-medium text-lg text-surface-900 dark:text-surface-0">{{ item.label }}</span>
-                    <span class="whitespace-nowrap">{{ item.subtext }}</span>
-                </span>
-            </a>
-            <div *ngIf="item.image" class="flex flex-col items-start gap-4 " >
-                <span>{{ item.subtext }}</span>
-                <p-button [label]="item.label" outlined="true"></p-button>
-            </div>
-        </ng-template>
-        <ng-template #end>
-        </ng-template>
-    </p-megamenu>
-</div>    
+      <a *ngIf="!item.root && !item.image" class="flex items-center p-2 cursor-pointer mb-2 gap-2"
+        (click)="item.command && item.command()">
+        <span class="inline-flex items-center justify-center rounded-full">
+          <i [ngClass]="item.icon + ' text-lg'"></i>
+        </span>
+        <span class="inline-flex flex-col gap-1">
+          <span class="font-medium text-lg text-surface-900 dark:text-surface-0">
+            {{ item.label }}
+          </span>
+          <span class="whitespace-nowrap">{{ item.subtext }}</span>
+        </span>
+      </a>
+
+      <div *ngIf="item.image" class="flex flex-col items-start gap-4">
+        <span>{{ item.subtext }}</span>
+        <p-button [label]="item.label" outlined="true"></p-button>
+      </div>
+    </ng-template>
+
+    <ng-template #end></ng-template>
+  </p-megamenu>
+
+</div>
