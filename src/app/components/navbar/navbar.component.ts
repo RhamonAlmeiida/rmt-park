@@ -5,13 +5,13 @@ import { AvatarModule } from 'primeng/avatar';
 import { ConfirmationService, MegaMenuItem, MessageService } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { MegaMenu, MegaMenuModule } from 'primeng/megamenu';
-import { LoguinService } from '../../services/loguin.service';
 import { ToastModule } from 'primeng/toast';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { DialogModule } from 'primeng/dialog';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-navbar',
@@ -27,12 +27,13 @@ import { DialogModule } from 'primeng/dialog';
     DialogModule,
     MegaMenuModule,
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService, LoginService ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent {
+  [x: string]: any;
   items: MegaMenuItem[] = [];
 
   usuarioEmail: string = '';
@@ -40,7 +41,7 @@ export class NavbarComponent {
 
   constructor(
     private router: Router,
-    private loguinService: LoguinService ,
+    private loginService: LoginService,
     private messageservice: MessageService,
   ) { }
 
@@ -84,12 +85,12 @@ export class NavbarComponent {
     this.router.navigate([caminho]);
   }
 
-  logout(){
-    this.loguinService.logout();
+  logout() {
+    this.loginService.logout();
   }
 
-  private apresentarMensagemDeslogado(){
-     this.messageservice.add({
+  private apresentarMensagemDeslogado() {
+    this.messageservice.add({
       severity: 'success',
       summary: 'Sucesso',
       detail: 'Deslogado com sucesso',
@@ -97,7 +98,7 @@ export class NavbarComponent {
 
     setTimeout(() => {
       this.logout();
-      this.router.navigate(['/loguin']);
-    },1000);
+      this.router.navigate(['/login']);
+    }, 1000);
   }
 }

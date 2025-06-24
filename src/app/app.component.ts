@@ -32,6 +32,6 @@ export class AppComponent {
   }
 
   mostrarNavbar(): boolean {
-    return this.router.url !== '/loguin';
+    return this.router.url !== '/login';
   }
 }
