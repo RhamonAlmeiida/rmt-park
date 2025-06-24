@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -15,6 +15,8 @@ import { Funcionarios } from '../../models/funcionarios';
 import { FuncionariosService } from '../../services/funcionarios-service';
 import { Router } from '@angular/router';
 import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { Empresa, TabelaPreco, TipoCobranca } from '../../models/configuracoes';
 
 @Component({
   selector: 'app-configuracoes',
@@ -25,27 +27,38 @@ import { DatePickerModule } from 'primeng/datepicker';
     ButtonModule,
     TableModule,
     ToastModule,
-    DatePickerModule ,
+    DatePickerModule,
     ConfirmDialogModule,
     DialogModule,
     TagModule,
     InputTextModule,
     DropdownModule,
+    InputNumberModule,
   ],
   templateUrl: './configuracoes.component.html',
   styleUrls: ['./configuracoes.component.scss'],
-  providers: [MessageService, ConfirmationService, FuncionariosService,]
+  providers: [MessageService, ConfirmationService, FuncionariosService]
 })
 export class ConfiguracoesComponent implements OnInit {
   dialogVisivelCadastrarFuncionario: boolean = false;
+  cancelarConfiguracoes: boolean = false;
   funcionarios: Funcionarios;
+  // configForm!: FormGroup;
+
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder,
+    // private empresa: Empresa = new Empresa(),
   ) {
     this.funcionarios = new Funcionarios();
+    // this.empresa = new Empresa();
+    // this.preco = new TabelaPreco();
+    // this.vagas = new Vagas();
+    // this.tipoCobranca = new TipoCobranca();
   }
+  empresa = new Empresa();
 
   listaTurnos: ListaTurnos[] = [
     new ListaTurnos('Manhã (07h - 13h)', 'manha'),
@@ -61,14 +74,39 @@ export class ConfiguracoesComponent implements OnInit {
   ];
 
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   abrirModalCadastrarFuncionario() {
     this.dialogVisivelCadastrarFuncionario = true;
     this.funcionarios = new Funcionarios();
   }
 
-  salvar() {
+  salvar() { }
+  editar() { }
 
+  SalvarConfiguracoes() {
   }
 }
+// if (this.configForm.valid) {
+//   const dados = this.configForm.value;
+//   console.log('Valores da tabela de preços:', dados);
+
+//   // Simula um "salvo com sucesso"
+//   this.messageService.add({
+//     severity: 'success',
+//     summary: 'Sucesso',
+//     detail: 'Tabela de preços salva com sucesso!'
+//   });
+
+//   // Aqui você pode enviar via HTTP para o backend
+//   // this.configuracaoService.salvarPrecos(dados).subscribe(...)
+// } else {
+//   this.messageService.add({
+//     severity: 'error',
+//     summary: 'Erro',
+//     detail: 'Por favor, preencha todos os campos obrigatórios.'
+//   });
+//   }
+// }
+
