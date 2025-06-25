@@ -5,6 +5,6 @@ export class Mensalista {
         public placa: string,
         public veiculo: string,
         public cor: string,
-        public cpf: string,
+        public cpf: string
     ) { }
 }

@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { RelatorioService } from '../../../services/relatorio.service';
 import { Relatorio } from '../../../models/relatorio';
+import { MensalistaService } from '../../../services/mensalista.service';
+import { Mensalista } from '../../../models/mensalista';
 
 @Component({
   selector: 'app-vaga-lista',
@@ -27,8 +29,10 @@ import { Relatorio } from '../../../models/relatorio';
     ConfirmDialogModule,
     TagModule,
     DialogModule,
+    
+  
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService, MensalistaService,],
   templateUrl: './vaga-lista.component.html',
   styleUrls: ['./vaga-lista.component.scss']
 })
@@ -56,6 +60,8 @@ export class VagaListaComponent implements OnInit {
     private messageService: MessageService,
     private vagaService: VagaService,
     private relatorioService: RelatorioService,
+    private mensalistaService: MensalistaService,
+
   ) {
     this.vagaCadastro = new VagaCadastro();
   }
@@ -162,25 +168,45 @@ export class VagaListaComponent implements OnInit {
     return regexPlaca.test(placa);
   }
 
-  salvar() {
-    const placaOriginal = this.vagaCadastro.placa ?? '';
-    const placa = placaOriginal.toUpperCase().trim();
+ salvar() {
+  const placaOriginal = this.vagaCadastro.placa ?? '';
+  const placa = placaOriginal.toUpperCase().trim();
 
-    if (placa.length !== 7 || !this.validarPlaca(placa)) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Placa inválida',
-        detail: 'A placa deve conter exatamente 7 caracteres e estar no formato: ABC1D23.',
-      });
-      return;
-    }
-
-    this.vagaCadastro.placa = placa;
-    this.vagas.push({ ...this.vagaCadastro });
-    this.apresentarmensagemCadastrado();
-    this.dialogVisivelCadastrar = false;
-    this.vagaCadastro = new VagaCadastro();
+  if (placa.length !== 7 || !this.validarPlaca(placa)) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Placa inválida',
+      detail: 'A placa deve conter exatamente 7 caracteres e estar no formato: ABC1D23.',
+    });
+    return;
   }
+
+  this.vagaCadastro.placa = placa;
+
+  // Verifica se é mensalista
+  this.mensalistaService.obterTodos().subscribe({
+    next: mensalistas => {
+      const mensalistaEncontrado = mensalistas.find(
+        m => m.placa.replace('-', '').toUpperCase() === placa
+      );
+
+      this.vagaCadastro.tipo = mensalistaEncontrado ? 'Mensalista' : 'Diarista';
+
+      this.vagas.push({ ...this.vagaCadastro });
+      this.apresentarmensagemCadastrado();
+      this.dialogVisivelCadastrar = false;
+      this.vagaCadastro = new VagaCadastro();
+    },
+    error: erro => {
+      console.error('Erro ao buscar mensalistas:', erro);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Falha ao verificar se a placa é de mensalista.'
+      });
+    }
+  });
+}
 
   apresentarmensagemCadastrado() {
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Veículo cadastrado com sucesso' });
@@ -189,9 +215,11 @@ export class VagaListaComponent implements OnInit {
     this.carregarVagas();
   }
   transformarPlacaParaMaiuscula(): void {
-    if (this.vagaCadastro.placa) {
-      this.vagaCadastro.placa = this.vagaCadastro.placa.toUpperCase();
-    }
+   this.vagaCadastro.placa = this.vagaCadastro.placa.toUpperCase();
+   const mensalistas = JSON.parse(localStorage.getItem('mensalistas') || '[]');
+   const placaDigitada = this.vagaCadastro.placa.replaceAll('-', '').toLowerCase();
+   const encontrado = mensalistas.find((m: any) => mensalistas.placa?.replace('-', '').toLowerCase() === placaDigitada);
+   this.vagaCadastro.tipo = encontrado ? 'Mensalista' : 'Diarista';
   }
 
 
@@ -225,11 +253,7 @@ export class VagaListaComponent implements OnInit {
     summary: 'Pagamento concluído',
     detail: `Veículo ${this.vagaSelecionada.placa} liberado com sucesso.`,
   });
-
-  // Remove da lista de vagas
   this.vagas = this.vagas.filter(v => v.id !== this.vagaSelecionada!.id);
-
-  // Reset
   this.dialogResumoSaidaVisivel = false;
   this.vagaSelecionada = undefined;
   this.dataHoraSaida = undefined;
@@ -249,4 +273,18 @@ export class VagaListaComponent implements OnInit {
     detail: 'Salvo no navegador (localStorage).'
   });
 }
+
+verificarTipoPorPlaca(placa: string) {
+  this.mensalistaService.obterTodos().subscribe({
+    next: (mensalistas) => {
+      const encontrado = mensalistas.find(m => m.placa.toUpperCase() === placa.toUpperCase());
+      this.vagaCadastro.tipo = encontrado ? 'Mensalista' : 'Diarista';
+    },
+    error: err => {
+      console.error('Erro ao verificar placa de mensalista', err);
+      this.vagaCadastro.tipo = 'Diarista';
+    }
+  });
+}
+
 }

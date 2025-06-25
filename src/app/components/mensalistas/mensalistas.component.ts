@@ -36,18 +36,11 @@ import { Router } from '@angular/router';
 })
 export class MensalistasComponent implements OnInit {
   carregandoMensalista?: boolean;
-  mensalistaCadastro: MensalistaCadastro;
   dialogVisivelCadastrarMensalista: boolean = false;
   dialogTituloCadastrarMensalista?: string;
   visible: boolean = false;
-
-
-  mensalistasCadastro: Array<Mensalista> = [
-    { id: 1, nome: 'Carlos Silva', placa: 'ABC-1234', veiculo: 'Carro', cpf: '123.456.789-00', cor: 'Vermelho' },
-    { id: 2, nome: 'Ana Pereira', placa: 'XYZ-5678', veiculo: 'Moto', cpf: '987.654.321-00', cor: 'Preto' },
-    { id: 3, nome: 'João Souza', placa: 'DEF-4321', veiculo: 'Carro', cpf: '111.222.333-44', cor: 'Branco' },
-    { id: 4, nome: 'Mariana Lima', placa: 'JKL-9876', veiculo: 'Caminhão', cpf: '555.666.777-88', cor: 'Azul' }
-  ];
+  mensalistas: Mensalista[] = [];
+  mensalistaCadastro: MensalistaCadastro = new MensalistaCadastro();
 
   constructor(
     private messageService: MessageService,
@@ -64,13 +57,20 @@ export class MensalistasComponent implements OnInit {
     this.carregarMensalistas();
   }
 
-  private carregarMensalistas() {
-    this.carregandoMensalista = true;
-    this.mensalistaService.obterTodos().subscribe({
-      next: () => this.apresentarmensagemApagado(),
-      error: erro => console.error(`Erro ao apagar mensalista: ${erro}`),
-    });
-  }
+private carregarMensalistas() {
+  this.carregandoMensalista = true;
+  this.mensalistaService.obterTodos().subscribe({
+    next: (mensalistas) => {
+      this.mensalistas = mensalistas;
+      this.carregandoMensalista = false;
+    },
+    error: erro => {
+      console.error(`Erro ao carregar mensalistas: ${erro}`);
+      this.carregandoMensalista = false;
+    }
+  });
+}
+
 
   abrirModalCadastrarMensalista() {
     this.dialogTituloCadastrarMensalista = "Cadastro de Mensalista";
@@ -134,11 +134,32 @@ export class MensalistasComponent implements OnInit {
 
 
 
-  salvar() {
-    this.mensalistasCadastro.push({ ...this.mensalistaCadastro });
-    this.apresentarmensagemCadastrado();
-    this.dialogVisivelCadastrarMensalista = false;
-    this.mensalistaCadastro = new MensalistaCadastro();
+salvar() {
+  const novoMensalista: Mensalista = {
+    id: this.mensalistas.length
+      ? Math.max(...this.mensalistas.map(m => m.id ?? 0)) + 1
+      : 1,
+    nome: this.mensalistaCadastro.nome,
+    placa: this.mensalistaCadastro.placa,
+    veiculo: this.mensalistaCadastro.veiculo,
+    cor: this.mensalistaCadastro.cor,
+    cpf: this.mensalistaCadastro.cpf,
+  };
+
+  this.mensalistas.push(novoMensalista);
+  localStorage.setItem('mensalistas', JSON.stringify(this.mensalistas));
+
+  this.apresentarmensagemCadastrado();
+  this.dialogVisivelCadastrarMensalista = false;
+  this.mensalistaCadastro = new MensalistaCadastro();
+
+  this.carregarMensalistas();
+}
+
+  transformarPlacaParaMaiuscula(): void {
+    if (this.mensalistaCadastro.placa) {
+      this.mensalistaCadastro.placa = this.mensalistaCadastro.placa.toUpperCase();
+    }
   }
 
 

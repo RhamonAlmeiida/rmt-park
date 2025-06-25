@@ -56,14 +56,14 @@
     class="unput-dark"
     [(ngModel)]="vagaCadastro.placa"
     maxlength="7"
-    (input)="transformarPlacaParaMaiuscula()"
+    (input)="transformarPlacaParaMaiuscula(); verificarTipoPorPlaca(vagaCadastro.placa)"
     placeholder="ABC1D23"
   />
 </div>
 
     <div>
       <label for="campo-tipo">Tipo : </label>
-      <input pInputText id="campo-tipo" class="input-dark" [(ngModel)]="vagaCadastro.tipo" />
+      <input pInputText id="campo-tipo" class="input-dark" [(ngModel)]="vagaCadastro.tipo" readonly />
     </div>
 
     <div>
