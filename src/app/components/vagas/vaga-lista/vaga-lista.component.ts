@@ -12,6 +12,8 @@ import { TagModule } from 'primeng/tag';
 import { VagaCadastro } from '../../../models/vaga-cadastro';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
+import { RelatorioService } from '../../../services/relatorio.service';
+import { Relatorio } from '../../../models/relatorio';
 
 @Component({
   selector: 'app-vaga-lista',
@@ -36,6 +38,15 @@ export class VagaListaComponent implements OnInit {
   dialogVisivelCadastrar: boolean = false;
   dialogTituloCadastrar?: string;
   dataHora?: Date;
+  vagaSelecionada?: Vaga;
+  dataHoraSaida?: Date;
+  dialogResumoSaidaVisivel = false;
+  valorTotal = 0;
+  duracao = '';
+  valorHora = 10;
+  formaPagamento: string = 'dinheiro';
+
+
 
   vagas: Array<Vaga> = [];
 
@@ -44,6 +55,7 @@ export class VagaListaComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private vagaService: VagaService,
+    private relatorioService: RelatorioService,
   ) {
     this.vagaCadastro = new VagaCadastro();
   }
@@ -77,6 +89,7 @@ export class VagaListaComponent implements OnInit {
   }
 
   confirmaSaida(event: Event, id: number) {
+    this.vagaSelecionada = this.vagas.find(v => v.id === id);
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Deseja realmente registrar a Saída?',
@@ -92,15 +105,47 @@ export class VagaListaComponent implements OnInit {
       acceptButtonProps: {
         label: 'Saída',
       },
-      accept: () => this.saida(id),
+      accept: () => this.registrarSaidaComResumo(),
     });
   }
+
+  private registrarSaidaComResumo() {
+    if (!this.vagaSelecionada) return;
+
+    this.dataHoraSaida = new Date();
+    const entrada = this.vagaSelecionada.dataHora;
+    const saida = this.dataHoraSaida;
+    const diffMs = saida.getTime() - entrada.getTime();
+    const diffHoras = diffMs / (1000 * 60 * 60);
+
+    this.valorTotal = Math.ceil(diffHoras) * this.valorHora;
+    this.duracao = `${Math.floor(diffHoras)}h ${Math.round((diffHoras % 1))}`
+
+    this.dialogResumoSaidaVisivel = true;
+  }
+
+  private confirmaPagamento() {
+    if (!this.vagaSelecionada) return;
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Pagamento Confirmado',
+      detail: `Pagamento de R$${this.valorTotal.toFixed(2)} realizado.`
+    });
+
+    this.dialogResumoSaidaVisivel = false;
+    this.vagaSelecionada = undefined;
+    this.carregarVagas();
+  }
+
 
   private saida(vagaId: number) {
     this.vagaService.saida(vagaId).subscribe({
       next: () => this.apresentarMensagemSaida(),
       error: erro => console.error(`Erro ao registrar saída: ${erro}`),
     });
+    this.vagas = this.vagas.filter(v => v.id !== vagaId);
+
   }
 
   private apresentarMensagemSaida() {
@@ -143,10 +188,65 @@ export class VagaListaComponent implements OnInit {
     this.vagaCadastro = new VagaCadastro();
     this.carregarVagas();
   }
-transformarPlacaParaMaiuscula(): void {
-  if (this.vagaCadastro.placa) {
-    this.vagaCadastro.placa = this.vagaCadastro.placa.toUpperCase();
+  transformarPlacaParaMaiuscula(): void {
+    if (this.vagaCadastro.placa) {
+      this.vagaCadastro.placa = this.vagaCadastro.placa.toUpperCase();
+    }
   }
-}
 
+
+ finalizarSaida() {
+  if (!this.vagaSelecionada || !this.dataHoraSaida) return;
+
+  const registroSaida = {
+    placa: this.vagaSelecionada.placa,
+    tipo: this.vagaSelecionada.tipo,
+    entrada: this.vagaSelecionada.dataHora,
+    saida: this.dataHoraSaida,
+    duracao: this.duracao,
+    valor: this.valorTotal,
+    formaPagamento: this.formaPagamento,
+  };
+
+  const relatorioSaida = {
+    placa: this.vagaSelecionada.placa,
+    tipo: this.vagaSelecionada.tipo,
+    dataHoraEntrada: this.vagaSelecionada.dataHora,
+    dataHoraSaida: this.dataHoraSaida,
+    valorPago: this.valorTotal,
+    formaPagamento: this.formaPagamento,
+    statusPagamento: 'Pago',
+  };
+
+  console.log('Saída registrada:', registroSaida);
+
+  this.messageService.add({
+    severity: 'success',
+    summary: 'Pagamento concluído',
+    detail: `Veículo ${this.vagaSelecionada.placa} liberado com sucesso.`,
+  });
+
+  // Remove da lista de vagas
+  this.vagas = this.vagas.filter(v => v.id !== this.vagaSelecionada!.id);
+
+  // Reset
+  this.dialogResumoSaidaVisivel = false;
+  this.vagaSelecionada = undefined;
+  this.dataHoraSaida = undefined;
+  this.valorTotal = 0;
+  this.duracao = '';
+  this.formaPagamento = 'dinheiro';
+  this.carregarVagas();
+
+  // ✅ Salvar localmente o relatório (em vez de chamar o backend)
+  const relatoriosSalvos = JSON.parse(localStorage.getItem('relatorios') || '[]');
+  relatoriosSalvos.push(relatorioSaida);
+  localStorage.setItem('relatorios', JSON.stringify(relatoriosSalvos));
+
+  this.messageService.add({
+    severity: 'success',
+    summary: 'Relatório salvo localmente',
+    detail: 'Salvo no navegador (localStorage).'
+  });
+}
 }

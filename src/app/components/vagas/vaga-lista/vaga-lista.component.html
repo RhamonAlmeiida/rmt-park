@@ -78,3 +78,34 @@
     </div>
   </div>
 </p-dialog>
+
+<p-dialog
+  header="Resumo da Saída"
+  [(visible)]="dialogResumoSaidaVisivel"
+  [modal]="true"
+  [closable]="true"
+  styleClass="custom-dark-dialog"
+  [style]="{ width: '30vw' }"
+>
+  <div class="form-container">
+    <p><strong>Placa:</strong> {{ vagaSelecionada?.placa }}</p>
+    <p><strong>Tipo:</strong> {{ vagaSelecionada?.tipo }}</p>
+    <p><strong>Entrada:</strong> {{ vagaSelecionada?.dataHora | date:'short' }}</p>
+    <p><strong>Saída:</strong> {{ dataHoraSaida | date:'short' }}</p>
+    <p><strong>Duração:</strong> {{ duracao }}</p>
+    <p><strong>Valor a Pagar:</strong> R$ {{ valorTotal | number:'1.2-2' }}</p>
+
+    <label for="forma-pagamento">Forma de Pagamento:</label>
+    <select id="forma-pagamento" class="input-dark" [(ngModel)]="formaPagamento">
+      <option value="dinheiro">Dinheiro</option>
+      <option value="pix">PIX</option>
+      <option value="cartao">Cartão</option>
+    </select>
+  </div>
+
+  <div class="footer-buttons">
+    <button pButton label="Cancelar" class="p-button-outlined p-button-secondary"
+      (click)="dialogResumoSaidaVisivel = false"></button>
+    <button pButton label="Concluir" class="p-button-success" (click)="finalizarSaida()"></button>
+  </div>
+</p-dialog>

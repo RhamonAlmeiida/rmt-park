@@ -51,21 +51,20 @@ export class RelatorioComponent implements OnInit {
 
 private carregarRelatorios() {
   this.carregandoRelatorios = true;
-  this.relatorioService.obterTodos().subscribe({
-    next: relatorios => {
-      this.relatorios = relatorios.map(r => ({
-        ...r,
-        dataHoraEntrada: new Date(r.dataHoraEntrada),
-        dataHoraSaida: new Date(r.dataHoraSaida),
-      }));
-    },
-    error: erro => {
-      console.error("Erro ao carregar relatórios:", erro);
-      this.carregandoRelatorios = false;
-    },
-    complete: () => this.carregandoRelatorios = false
-  });
+
+  // Simula carregamento local (sem backend)
+  const relatoriosLocal = JSON.parse(localStorage.getItem('relatorios') || '[]');
+
+  this.relatorios = relatoriosLocal.map((r: any, index: number) => ({
+    ...r,
+    id: index + 1, // Atribui ID sequencial
+    dataHoraEntrada: new Date(r.dataHoraEntrada),
+    dataHoraSaida: new Date(r.dataHoraSaida),
+  }));
+
+  this.carregandoRelatorios = false;
 }
+
 
 
   exportarPDF() {

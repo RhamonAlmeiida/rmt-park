@@ -7,15 +7,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RelatorioService {
-    private urlAPI: string;
-  constructor(private http: HttpClient) { 
+  private urlAPI: string;
+  constructor(private http: HttpClient) {
     this.urlAPI = "http//localhost:4200/"
   }
 
-    obterTodos() : Observable<Relatorio[]>{
-      return this.http.get<Relatorio[]>(this.urlAPI)
-    }
-    obterPorId(id: number): Observable<Relatorio>{
-      return this.http.get<Relatorio>(`${this.urlAPI}/${id}`);
-    }
+  obterTodos(): Observable<Relatorio[]> {
+    return this.http.get<Relatorio[]>(this.urlAPI)
+  }
+  obterPorId(id: number): Observable<Relatorio> {
+    return this.http.get<Relatorio>(`${this.urlAPI}/${id}`);
+  }
+  registrar(relatorio: Relatorio): Observable<any> {
+   return this.http.post(`${this.urlAPI}/relatorios`, relatorio);
+  }
+
 }
