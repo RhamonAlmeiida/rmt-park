@@ -2,16 +2,10 @@
 <p-confirmDialog></p-confirmDialog>
 
 
-<div class="card flex justify-center p-2">
+<div class="flex justify-content-end mb-2 p-2 gap-2">
     <p-button (click)="abrirModalCadastrarFuncionario()" label="Novo Funcionário" />
     <p-dialog header="Cadastro Funcionário" [modal]="true" [(visible)]="dialogVisivelCadastrarFuncionario"
         [style]="{ width: '25rem' }">
-        <!-- Telefone  -->
-        <div class="inline-flex flex-col gap-2 p-2">
-            <label for="campo-telefone" class="text-primary-50 font-semibold">Telefone</label>
-            <input pInputText id="campo-telefone" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
-                [(ngModel)]="funcionarios.telefone" />
-        </div>
 
         <!-- Nome  -->
         <div class="inline-flex flex-col gap-2 p-2">
@@ -65,7 +59,12 @@
                 placeholder="Selecione o turno" appendTo="body">
             </p-dropdown>
         </div>
-
+        <!-- Telefone  -->
+        <div class="inline-flex flex-col gap-2 p-2">
+            <label for="campo-telefone" class="text-primary-50 font-semibold">Telefone</label>
+            <input pInputText id="campo-telefone" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+                [(ngModel)]="funcionarios.telefone" />
+        </div>
 
 
 

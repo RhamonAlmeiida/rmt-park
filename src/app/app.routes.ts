@@ -5,7 +5,7 @@ import { ConfiguracoesComponent } from './components/configuracoes/configuracoes
 import { VagaCadastroComponent } from './components/vaga-cadastro/vaga-cadastro.component';
 import { RelatorioComponent } from './components/relatorios/relatorios.component';
 import { authGuard } from './auth.guard';  // ajuste o caminho correto aqui
-import { LoguinComponent } from './components/loguin/loguin/loguin.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 export const routes: Routes = [
@@ -14,7 +14,6 @@ export const routes: Routes = [
   { path: 'mensalistas', component: MensalistasComponent, canActivate: [authGuard] },
   { path: 'relatorio', component: RelatorioComponent, canActivate: [authGuard] },
   { path: 'configuracoes', component: ConfiguracoesComponent, canActivate: [authGuard] },
-
-  { path: 'loguin', component: LoguinComponent }, // rota pública
-  { path: '', redirectTo: 'loguin', pathMatch: 'full' }, // rota raiz redireciona pro login
+  { path: 'login', component: LoginComponent }, // rota pública
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, // rota raiz redireciona pro login
 ];
