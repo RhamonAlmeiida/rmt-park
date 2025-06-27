@@ -27,17 +27,38 @@ cadastrar(mensalistaCadastro: MensalistaCadastro): Observable<Mensalista> {
     ? Math.max(...lista.map(m => m.id ?? 0)) + 1
     : 1;
 
-  console.log('proximoId calculado:', proximoId); 
+  const hoje = new Date();
+  const validade = mensalistaCadastro.validade
+    ? new Date(mensalistaCadastro.validade)
+    : hoje;
+
+  const diasRestantes = Math.ceil(
+    (validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  const status: 'ativo' | 'inadimplente' | 'vencendo' =
+    validade < hoje
+      ? 'inadimplente'
+      : diasRestantes <= 5
+        ? 'vencendo'
+        : 'ativo';
 
   const novo: Mensalista = {
     id: proximoId,
-    ...mensalistaCadastro
+    nome: mensalistaCadastro.nome,
+    placa: mensalistaCadastro.placa,
+    veiculo: mensalistaCadastro.veiculo,
+    cor: mensalistaCadastro.cor,
+    cpf: mensalistaCadastro.cpf,
+    validade: validade.toISOString().split('T')[0], // formato yyyy-MM-dd
+    status: status
   };
 
   lista.push(novo);
   this.salvarMensalistas(lista);
   return of(novo);
 }
+
 
 
 

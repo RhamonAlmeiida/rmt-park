@@ -1,9 +1,8 @@
 export class MensalistaCadastro {
-    constructor(
-        public nome: string = "",
-        public placa: string = "",
-        public veiculo: string = "",
-        public cor: string = "",
-        public cpf: string = ""
-    ) { }
+  nome: string = '';
+  placa: string = '';
+  veiculo: string = '';
+  cor: string = '';
+  cpf: string = '';
+  validade: string = ''; 
 }

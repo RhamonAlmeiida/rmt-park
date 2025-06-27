@@ -13,22 +13,24 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Mensalista } from '../../models/mensalista';
 import { MensalistaService } from '../../services/mensalista.service';
 import { Router } from '@angular/router';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-mensalistas',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ButtonModule,
-    TableModule,
-    ToastModule,
-    ConfirmDialogModule,
-    DialogModule,
-    TagModule,
-    Dialog,
-    InputTextModule,
-  ],
+imports: [
+  CommonModule,
+  FormsModule,
+  ButtonModule,
+  TableModule,
+  ToastModule,
+  ConfirmDialogModule,
+  DialogModule,
+  TagModule,
+  InputTextModule,
+  CalendarModule
+]
+,
 
   templateUrl: './mensalistas.component.html',
   styleUrls: ['./mensalistas.component.scss'],
@@ -135,6 +137,15 @@ private carregarMensalistas() {
 
 
 salvar() {
+  const hoje = new Date();
+  const validadeStr = this.mensalistaCadastro.validade;
+  const validade = validadeStr ? new Date(validadeStr) : hoje;
+
+  const diasRestantes = Math.ceil((validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
+  const status: 'ativo' | 'inadimplente' | 'vencendo' =
+    validade < hoje ? 'inadimplente' :
+    diasRestantes <= 5 ? 'vencendo' : 'ativo';
+
   const novoMensalista: Mensalista = {
     id: this.mensalistas.length
       ? Math.max(...this.mensalistas.map(m => m.id ?? 0)) + 1
@@ -144,23 +155,55 @@ salvar() {
     veiculo: this.mensalistaCadastro.veiculo,
     cor: this.mensalistaCadastro.cor,
     cpf: this.mensalistaCadastro.cpf,
+    validade: validade.toISOString().split('T')[0], 
+    status: status,
   };
 
   this.mensalistas.push(novoMensalista);
   localStorage.setItem('mensalistas', JSON.stringify(this.mensalistas));
 
   this.apresentarmensagemCadastrado();
+
+   if (status === 'vencendo') {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Atenção',
+      detail: `Validade vence em ${diasRestantes} dia(s)!`,
+    });
+  }
+
+
   this.dialogVisivelCadastrarMensalista = false;
   this.mensalistaCadastro = new MensalistaCadastro();
 
   this.carregarMensalistas();
 }
 
+
+
   transformarPlacaParaMaiuscula(): void {
     if (this.mensalistaCadastro.placa) {
       this.mensalistaCadastro.placa = this.mensalistaCadastro.placa.toUpperCase();
     }
   }
+
+renovarValidade(mensalista: Mensalista) {
+  const novaValidade = new Date();
+  novaValidade.setMonth(novaValidade.getMonth() + 1);
+
+  mensalista.validade = novaValidade.toISOString().split('T')[0];
+
+  const hoje = new Date();
+  const diasRestantes = Math.ceil((novaValidade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
+  mensalista.status =
+    novaValidade < hoje ? 'inadimplente' :
+    diasRestantes <= 5 ? 'vencendo' : 'ativo';
+
+  localStorage.setItem('mensalistas', JSON.stringify(this.mensalistas));
+  this.messageService.add({ severity: 'success', summary: 'Renovado', detail: 'Validade atualizada' });
+}
+
+
 
 
 

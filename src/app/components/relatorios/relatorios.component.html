@@ -2,13 +2,57 @@
 <p-confirmDialog></p-confirmDialog>
 
 <div class="card">
-      <div class="flex justify-content-end mb-2 p-2 gap-2">
+  <div class="flex justify-content-end mb-2 p-2 gap-2">
     <button pButton label="Exportar PDF" icon="pi pi-file-pdf" class="p-button-danger" (click)="exportarPDF()"></button>
     <button pButton label="Exportar Excel" icon="pi pi-file-excel" class="p-button-success" (click)="exportarExcel()"></button>
     <button pButton label="Imprimir" icon="pi pi-print" class="p-button-secondary" (click)="imprimir()"></button>
   </div>
 
-  <p-table [value]="relatorios" dataKey="id" [loading]="carregandoRelatorios" [tableStyle]="{'min-width': '60rem'}">
+ <div class="filtros-container flex gap-2 mb-3">
+  <input
+    pInputText
+    placeholder="Placa"
+    [(ngModel)]="filtroPlaca"
+    (ngModelChange)="filtrarRelatorios()"
+    class="input-dark"
+  />
+
+  <p-dropdown
+    [(ngModel)]="filtroTipo"
+    [options]="tiposFiltro"
+    optionLabel="label"
+    optionValue="value"
+    (onChange)="filtrarRelatorios()"
+    placeholder="Tipo"
+    class="input-dark"
+  ></p-dropdown>
+
+  <p-dropdown
+    [(ngModel)]="filtroPagamento"
+    [options]="formasPagamentoFiltro"
+    optionLabel="label"
+    optionValue="value"
+    (onChange)="filtrarRelatorios()"
+    placeholder="Pagamento"
+    class="input-dark"
+  ></p-dropdown>
+
+  <button
+    pButton
+    type="button"
+    label="Limpar Filtros"
+    icon="pi pi-times"
+    (click)="limparFiltros()"
+    class="p-button-secondary"
+  ></button>
+</div>
+
+
+  <!-- 📊 Tabela -->
+  <p-table
+    [value]="relatoriosFiltrados"
+    [tableStyle]="{ 'min-width': '60rem' }"
+  >
     <ng-template pTemplate="header">
       <tr>
         <th>ID</th>
@@ -27,7 +71,10 @@
         <td>{{ relatorio.id }}</td>
         <td>{{ relatorio.placa }}</td>
         <td>
-          <p-tag [severity]="relatorio.tipo === 'Mensalista' ? 'info' : 'secondary'" [value]="relatorio.tipo"></p-tag>
+          <p-tag
+            [severity]="relatorio.tipo === 'Mensalista' ? 'info' : 'secondary'"
+            [value]="relatorio.tipo"
+          ></p-tag>
         </td>
         <td>{{ relatorio.dataHoraEntrada | date: 'short' }}</td>
         <td>{{ relatorio.dataHoraSaida | date: 'short' }}</td>
@@ -43,3 +90,4 @@
     </ng-template>
   </p-table>
 </div>
+,

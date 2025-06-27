@@ -21,5 +21,9 @@ export class RelatorioService {
   registrar(relatorio: Relatorio): Observable<any> {
    return this.http.post(`${this.urlAPI}/relatorios`, relatorio);
   }
+  excluir(id: number): Observable<any> {
+  return this.http.delete(`${this.urlAPI}/relatorios/${id}`);
+}
+
 
 }

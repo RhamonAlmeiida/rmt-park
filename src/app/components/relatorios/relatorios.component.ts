@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { Relatorio } from '../../models/relatorio';
 import { Route, Router } from '@angular/router';
 import { RelatorioService } from '../../services/relatorio.service';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @Component({
@@ -27,6 +28,7 @@ import { RelatorioService } from '../../services/relatorio.service';
     ConfirmDialogModule,
     TagModule,
     DialogModule,
+    DropdownModule,
   ],
   providers: [ConfirmationService, MessageService],
 })
@@ -35,6 +37,25 @@ export class RelatorioComponent implements OnInit {
   dataHora?: Date;
 
   relatorios: Array<Relatorio> = [];
+  relatoriosFiltrados: Array<Relatorio> = [];
+
+  filtroPlaca: string = '';
+  filtroTipo: string = '';
+  filtroPagamento: string = '';
+
+tiposFiltro = [
+  { label: 'Todos', value: '' },
+  { label: 'Mensalista', value: 'Mensalista' },
+  { label: 'Diarista', value: 'Diarista' },
+];
+
+formasPagamentoFiltro = [
+  { label: 'Todos', value: '' },
+  { label: 'Dinheiro', value: 'Dinheiro' },
+  { label: 'PIX', value: 'Pix' },
+  { label: 'Cartão', value: 'Cartão' },
+];
+
 
 
   constructor(
@@ -52,19 +73,35 @@ export class RelatorioComponent implements OnInit {
 private carregarRelatorios() {
   this.carregandoRelatorios = true;
 
-  // Simula carregamento local (sem backend)
+
   const relatoriosLocal = JSON.parse(localStorage.getItem('relatorios') || '[]');
 
   this.relatorios = relatoriosLocal.map((r: any, index: number) => ({
     ...r,
-    id: index + 1, // Atribui ID sequencial
+    id: index + 1,
     dataHoraEntrada: new Date(r.dataHoraEntrada),
     dataHoraSaida: new Date(r.dataHoraSaida),
   }));
 
+  this.relatoriosFiltrados = [...this.relatorios];
   this.carregandoRelatorios = false;
 }
+ 
+filtrarRelatorios() {
+  this.relatoriosFiltrados = this.relatorios.filter(r =>
+    (!this.filtroPlaca || (r.placa?.toLowerCase() || '').includes(this.filtroPlaca.toLowerCase())) &&
+    (!this.filtroTipo || (r.tipo?.toLowerCase() || '') === this.filtroTipo.toLowerCase()) &&
+    (!this.filtroPagamento || (r.formaPagamento?.toLowerCase() || '') === this.filtroPagamento.toLowerCase())
+  );
+}
 
+
+  limparFiltros() {
+    this.filtroPlaca = '';
+    this.filtroTipo = '';
+    this.filtroPagamento = '';
+    this.relatoriosFiltrados = [...this.relatorios];
+  }
 
 
   exportarPDF() {

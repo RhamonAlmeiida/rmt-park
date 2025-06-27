@@ -168,7 +168,7 @@ export class VagaListaComponent implements OnInit {
     return regexPlaca.test(placa);
   }
 
- salvar() {
+salvar() {
   const placaOriginal = this.vagaCadastro.placa ?? '';
   const placa = placaOriginal.toUpperCase().trim();
 
@@ -192,6 +192,27 @@ export class VagaListaComponent implements OnInit {
 
       this.vagaCadastro.tipo = mensalistaEncontrado ? 'Mensalista' : 'Diarista';
 
+      if (mensalistaEncontrado && mensalistaEncontrado.validade) {
+        const hoje = new Date();
+        const validade = new Date(mensalistaEncontrado.validade);
+        const diasRestantes = Math.ceil((validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (validade < hoje) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Validade vencida',
+            detail: 'Este mensalista está com a validade vencida!',
+          });
+        } else if (diasRestantes <= 5) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Validade prestes a vencer',
+            detail: `Faltam apenas ${diasRestantes} dia(s) para a validade expirar.`,
+          });
+        }
+      }
+
+      // Continua com o cadastro da vaga
       this.vagas.push({ ...this.vagaCadastro });
       this.apresentarmensagemCadastrado();
       this.dialogVisivelCadastrar = false;
@@ -207,6 +228,7 @@ export class VagaListaComponent implements OnInit {
     }
   });
 }
+
 
   apresentarmensagemCadastrado() {
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Veículo cadastrado com sucesso' });
