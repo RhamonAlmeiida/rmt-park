@@ -16,6 +16,7 @@ import { RelatorioService } from '../../../services/relatorio.service';
 import { Relatorio } from '../../../models/relatorio';
 import { MensalistaService } from '../../../services/mensalista.service';
 import { Mensalista } from '../../../models/mensalista';
+import { ConfiguracoesService } from '../../../services/configuracoes.service';
 
 @Component({
   selector: 'app-vaga-lista',
@@ -29,8 +30,8 @@ import { Mensalista } from '../../../models/mensalista';
     ConfirmDialogModule,
     TagModule,
     DialogModule,
-    
-  
+
+
   ],
   providers: [ConfirmationService, MessageService, MensalistaService,],
   templateUrl: './vaga-lista.component.html',
@@ -47,7 +48,7 @@ export class VagaListaComponent implements OnInit {
   dialogResumoSaidaVisivel = false;
   valorTotal = 0;
   duracao = '';
-  valorHora = 10;
+  valorHora: number = 10;
   formaPagamento: string = 'dinheiro';
 
 
@@ -61,6 +62,7 @@ export class VagaListaComponent implements OnInit {
     private vagaService: VagaService,
     private relatorioService: RelatorioService,
     private mensalistaService: MensalistaService,
+    private configuracoesService: ConfiguracoesService,
 
   ) {
     this.vagaCadastro = new VagaCadastro();
@@ -68,7 +70,12 @@ export class VagaListaComponent implements OnInit {
 
   ngOnInit() {
     this.carregarVagas();
+
+    this.valorHora = this.configuracoesService.obterValorHora();
+
   }
+
+
 
   private carregarVagas() {
     this.carregandoVagas = true;
@@ -123,9 +130,14 @@ export class VagaListaComponent implements OnInit {
     const saida = this.dataHoraSaida;
     const diffMs = saida.getTime() - entrada.getTime();
     const diffHoras = diffMs / (1000 * 60 * 60);
+    this.valorHora = this.configuracoesService.obterValorHora();
+
+
 
     this.valorTotal = Math.ceil(diffHoras) * this.valorHora;
-    this.duracao = `${Math.floor(diffHoras)}h ${Math.round((diffHoras % 1))}`
+    const minutos = Math.round((diffHoras % 1) * 60);
+    this.duracao = `${Math.floor(diffHoras)}h ${minutos}min`;
+
 
     this.dialogResumoSaidaVisivel = true;
   }
@@ -168,66 +180,66 @@ export class VagaListaComponent implements OnInit {
     return regexPlaca.test(placa);
   }
 
-salvar() {
-  const placaOriginal = this.vagaCadastro.placa ?? '';
-  const placa = placaOriginal.toUpperCase().trim();
+  salvar() {
+    const placaOriginal = this.vagaCadastro.placa ?? '';
+    const placa = placaOriginal.toUpperCase().trim();
 
-  if (placa.length !== 7 || !this.validarPlaca(placa)) {
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Placa inválida',
-      detail: 'A placa deve conter exatamente 7 caracteres e estar no formato: ABC1D23.',
-    });
-    return;
-  }
-
-  this.vagaCadastro.placa = placa;
-
-  // Verifica se é mensalista
-  this.mensalistaService.obterTodos().subscribe({
-    next: mensalistas => {
-      const mensalistaEncontrado = mensalistas.find(
-        m => m.placa.replace('-', '').toUpperCase() === placa
-      );
-
-      this.vagaCadastro.tipo = mensalistaEncontrado ? 'Mensalista' : 'Diarista';
-
-      if (mensalistaEncontrado && mensalistaEncontrado.validade) {
-        const hoje = new Date();
-        const validade = new Date(mensalistaEncontrado.validade);
-        const diasRestantes = Math.ceil((validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
-
-        if (validade < hoje) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Validade vencida',
-            detail: 'Este mensalista está com a validade vencida!',
-          });
-        } else if (diasRestantes <= 5) {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Validade prestes a vencer',
-            detail: `Faltam apenas ${diasRestantes} dia(s) para a validade expirar.`,
-          });
-        }
-      }
-
-      // Continua com o cadastro da vaga
-      this.vagas.push({ ...this.vagaCadastro });
-      this.apresentarmensagemCadastrado();
-      this.dialogVisivelCadastrar = false;
-      this.vagaCadastro = new VagaCadastro();
-    },
-    error: erro => {
-      console.error('Erro ao buscar mensalistas:', erro);
+    if (placa.length !== 7 || !this.validarPlaca(placa)) {
       this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Falha ao verificar se a placa é de mensalista.'
+        severity: 'warn',
+        summary: 'Placa inválida',
+        detail: 'A placa deve conter exatamente 7 caracteres e estar no formato: ABC1D23.',
       });
+      return;
     }
-  });
-}
+
+    this.vagaCadastro.placa = placa;
+
+    // Verifica se é mensalista
+    this.mensalistaService.obterTodos().subscribe({
+      next: mensalistas => {
+        const mensalistaEncontrado = mensalistas.find(
+          m => m.placa.replace('-', '').toUpperCase() === placa
+        );
+
+        this.vagaCadastro.tipo = mensalistaEncontrado ? 'Mensalista' : 'Diarista';
+
+        if (mensalistaEncontrado && mensalistaEncontrado.validade) {
+          const hoje = new Date();
+          const validade = new Date(mensalistaEncontrado.validade);
+          const diasRestantes = Math.ceil((validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
+
+          if (validade < hoje) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Validade vencida',
+              detail: 'Este mensalista está com a validade vencida!',
+            });
+          } else if (diasRestantes <= 5) {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Validade prestes a vencer',
+              detail: `Faltam apenas ${diasRestantes} dia(s) para a validade expirar.`,
+            });
+          }
+        }
+
+        // Continua com o cadastro da vaga
+        this.vagas.push({ ...this.vagaCadastro });
+        this.apresentarmensagemCadastrado();
+        this.dialogVisivelCadastrar = false;
+        this.vagaCadastro = new VagaCadastro();
+      },
+      error: erro => {
+        console.error('Erro ao buscar mensalistas:', erro);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Falha ao verificar se a placa é de mensalista.'
+        });
+      }
+    });
+  }
 
 
   apresentarmensagemCadastrado() {
@@ -237,76 +249,77 @@ salvar() {
     this.carregarVagas();
   }
   transformarPlacaParaMaiuscula(): void {
-   this.vagaCadastro.placa = this.vagaCadastro.placa.toUpperCase();
-   const mensalistas = JSON.parse(localStorage.getItem('mensalistas') || '[]');
-   const placaDigitada = this.vagaCadastro.placa.replaceAll('-', '').toLowerCase();
-   const encontrado = mensalistas.find((m: any) => mensalistas.placa?.replace('-', '').toLowerCase() === placaDigitada);
-   this.vagaCadastro.tipo = encontrado ? 'Mensalista' : 'Diarista';
+    this.vagaCadastro.placa = this.vagaCadastro.placa.toUpperCase();
+    const mensalistas = JSON.parse(localStorage.getItem('mensalistas') || '[]');
+    const placaDigitada = this.vagaCadastro.placa.replaceAll('-', '').toLowerCase();
+   const encontrado = mensalistas.find((m: any) => m.placa?.replace('-', '').toLowerCase() === placaDigitada);
+
+    this.vagaCadastro.tipo = encontrado ? 'Mensalista' : 'Diarista';
   }
 
 
- finalizarSaida() {
-  if (!this.vagaSelecionada || !this.dataHoraSaida) return;
+  finalizarSaida() {
+    if (!this.vagaSelecionada || !this.dataHoraSaida) return;
 
-  const registroSaida = {
-    placa: this.vagaSelecionada.placa,
-    tipo: this.vagaSelecionada.tipo,
-    entrada: this.vagaSelecionada.dataHora,
-    saida: this.dataHoraSaida,
-    duracao: this.duracao,
-    valor: this.valorTotal,
-    formaPagamento: this.formaPagamento,
-  };
+    const registroSaida = {
+      placa: this.vagaSelecionada.placa,
+      tipo: this.vagaSelecionada.tipo,
+      entrada: this.vagaSelecionada.dataHora,
+      saida: this.dataHoraSaida,
+      duracao: this.duracao,
+      valor: this.valorTotal,
+      formaPagamento: this.formaPagamento,
+    };
 
-  const relatorioSaida = {
-    placa: this.vagaSelecionada.placa,
-    tipo: this.vagaSelecionada.tipo,
-    dataHoraEntrada: this.vagaSelecionada.dataHora,
-    dataHoraSaida: this.dataHoraSaida,
-    valorPago: this.valorTotal,
-    formaPagamento: this.formaPagamento,
-    statusPagamento: 'Pago',
-  };
+    const relatorioSaida = {
+      placa: this.vagaSelecionada.placa,
+      tipo: this.vagaSelecionada.tipo,
+      dataHoraEntrada: this.vagaSelecionada.dataHora,
+      dataHoraSaida: this.dataHoraSaida,
+      valorPago: this.valorTotal,
+      formaPagamento: this.formaPagamento,
+      statusPagamento: 'Pago',
+    };
 
-  console.log('Saída registrada:', registroSaida);
+    console.log('Saída registrada:', registroSaida);
 
-  this.messageService.add({
-    severity: 'success',
-    summary: 'Pagamento concluído',
-    detail: `Veículo ${this.vagaSelecionada.placa} liberado com sucesso.`,
-  });
-  this.vagas = this.vagas.filter(v => v.id !== this.vagaSelecionada!.id);
-  this.dialogResumoSaidaVisivel = false;
-  this.vagaSelecionada = undefined;
-  this.dataHoraSaida = undefined;
-  this.valorTotal = 0;
-  this.duracao = '';
-  this.formaPagamento = 'dinheiro';
-  this.carregarVagas();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Pagamento concluído',
+      detail: `Veículo ${this.vagaSelecionada.placa} liberado com sucesso.`,
+    });
+    this.vagas = this.vagas.filter(v => v.id !== this.vagaSelecionada!.id);
+    this.dialogResumoSaidaVisivel = false;
+    this.vagaSelecionada = undefined;
+    this.dataHoraSaida = undefined;
+    this.valorTotal = 0;
+    this.duracao = '';
+    this.formaPagamento = 'dinheiro';
+    this.carregarVagas();
 
-  // ✅ Salvar localmente o relatório (em vez de chamar o backend)
-  const relatoriosSalvos = JSON.parse(localStorage.getItem('relatorios') || '[]');
-  relatoriosSalvos.push(relatorioSaida);
-  localStorage.setItem('relatorios', JSON.stringify(relatoriosSalvos));
+    // ✅ Salvar localmente o relatório (em vez de chamar o backend)
+    const relatoriosSalvos = JSON.parse(localStorage.getItem('relatorios') || '[]');
+    relatoriosSalvos.push(relatorioSaida);
+    localStorage.setItem('relatorios', JSON.stringify(relatoriosSalvos));
 
-  this.messageService.add({
-    severity: 'success',
-    summary: 'Relatório salvo localmente',
-    detail: 'Salvo no navegador (localStorage).'
-  });
-}
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Relatório salvo localmente',
+      detail: 'Salvo no navegador (localStorage).'
+    });
+  }
 
-verificarTipoPorPlaca(placa: string) {
-  this.mensalistaService.obterTodos().subscribe({
-    next: (mensalistas) => {
-      const encontrado = mensalistas.find(m => m.placa.toUpperCase() === placa.toUpperCase());
-      this.vagaCadastro.tipo = encontrado ? 'Mensalista' : 'Diarista';
-    },
-    error: err => {
-      console.error('Erro ao verificar placa de mensalista', err);
-      this.vagaCadastro.tipo = 'Diarista';
-    }
-  });
-}
+  verificarTipoPorPlaca(placa: string) {
+    this.mensalistaService.obterTodos().subscribe({
+      next: (mensalistas) => {
+        const encontrado = mensalistas.find(m => m.placa.toUpperCase() === placa.toUpperCase());
+        this.vagaCadastro.tipo = encontrado ? 'Mensalista' : 'Diarista';
+      },
+      error: err => {
+        console.error('Erro ao verificar placa de mensalista', err);
+        this.vagaCadastro.tipo = 'Diarista';
+      }
+    });
+  }
 
 }

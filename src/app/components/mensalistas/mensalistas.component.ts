@@ -18,19 +18,19 @@ import { CalendarModule } from 'primeng/calendar';
 @Component({
   selector: 'app-mensalistas',
   standalone: true,
-imports: [
-  CommonModule,
-  FormsModule,
-  ButtonModule,
-  TableModule,
-  ToastModule,
-  ConfirmDialogModule,
-  DialogModule,
-  TagModule,
-  InputTextModule,
-  CalendarModule
-]
-,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    ToastModule,
+    ConfirmDialogModule,
+    DialogModule,
+    TagModule,
+    InputTextModule,
+    CalendarModule
+  ]
+  ,
 
   templateUrl: './mensalistas.component.html',
   styleUrls: ['./mensalistas.component.scss'],
@@ -43,6 +43,7 @@ export class MensalistasComponent implements OnInit {
   visible: boolean = false;
   mensalistas: Mensalista[] = [];
   mensalistaCadastro: MensalistaCadastro = new MensalistaCadastro();
+  mensalistaSelecionado?: Mensalista;
 
   constructor(
     private messageService: MessageService,
@@ -59,19 +60,19 @@ export class MensalistasComponent implements OnInit {
     this.carregarMensalistas();
   }
 
-private carregarMensalistas() {
-  this.carregandoMensalista = true;
-  this.mensalistaService.obterTodos().subscribe({
-    next: (mensalistas) => {
-      this.mensalistas = mensalistas;
-      this.carregandoMensalista = false;
-    },
-    error: erro => {
-      console.error(`Erro ao carregar mensalistas: ${erro}`);
-      this.carregandoMensalista = false;
-    }
-  });
-}
+  private carregarMensalistas() {
+    this.carregandoMensalista = true;
+    this.mensalistaService.obterTodos().subscribe({
+      next: (mensalistas) => {
+        this.mensalistas = mensalistas;
+        this.carregandoMensalista = false;
+      },
+      error: erro => {
+        console.error(`Erro ao carregar mensalistas: ${erro}`);
+        this.carregandoMensalista = false;
+      }
+    });
+  }
 
 
   abrirModalCadastrarMensalista() {
@@ -136,48 +137,48 @@ private carregarMensalistas() {
 
 
 
-salvar() {
-  const hoje = new Date();
-  const validadeStr = this.mensalistaCadastro.validade;
-  const validade = validadeStr ? new Date(validadeStr) : hoje;
+  salvar() {
+    const hoje = new Date();
+    const validadeStr = this.mensalistaCadastro.validade;
+    const validade = validadeStr ? new Date(validadeStr) : hoje;
 
-  const diasRestantes = Math.ceil((validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
-  const status: 'ativo' | 'inadimplente' | 'vencendo' =
-    validade < hoje ? 'inadimplente' :
-    diasRestantes <= 5 ? 'vencendo' : 'ativo';
+    const diasRestantes = Math.ceil((validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
+    const status: 'ativo' | 'inadimplente' | 'vencendo' =
+      validade < hoje ? 'inadimplente' :
+        diasRestantes <= 5 ? 'vencendo' : 'ativo';
 
-  const novoMensalista: Mensalista = {
-    id: this.mensalistas.length
-      ? Math.max(...this.mensalistas.map(m => m.id ?? 0)) + 1
-      : 1,
-    nome: this.mensalistaCadastro.nome,
-    placa: this.mensalistaCadastro.placa,
-    veiculo: this.mensalistaCadastro.veiculo,
-    cor: this.mensalistaCadastro.cor,
-    cpf: this.mensalistaCadastro.cpf,
-    validade: validade.toISOString().split('T')[0], 
-    status: status,
-  };
+    const novoMensalista: Mensalista = {
+      id: this.mensalistas.length
+        ? Math.max(...this.mensalistas.map(m => m.id ?? 0)) + 1
+        : 1,
+      nome: this.mensalistaCadastro.nome,
+      placa: this.mensalistaCadastro.placa,
+      veiculo: this.mensalistaCadastro.veiculo,
+      cor: this.mensalistaCadastro.cor,
+      cpf: this.mensalistaCadastro.cpf,
+      validade: validade.toISOString().split('T')[0],
+      status: status,
+    };
 
-  this.mensalistas.push(novoMensalista);
-  localStorage.setItem('mensalistas', JSON.stringify(this.mensalistas));
+    this.mensalistas.push(novoMensalista);
+    localStorage.setItem('mensalistas', JSON.stringify(this.mensalistas));
 
-  this.apresentarmensagemCadastrado();
+    this.apresentarmensagemCadastrado();
 
-   if (status === 'vencendo') {
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Atenção',
-      detail: `Validade vence em ${diasRestantes} dia(s)!`,
-    });
+    if (status === 'vencendo') {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: `Validade vence em ${diasRestantes} dia(s)!`,
+      });
+    }
+
+
+    this.dialogVisivelCadastrarMensalista = false;
+    this.mensalistaCadastro = new MensalistaCadastro();
+
+    this.carregarMensalistas();
   }
-
-
-  this.dialogVisivelCadastrarMensalista = false;
-  this.mensalistaCadastro = new MensalistaCadastro();
-
-  this.carregarMensalistas();
-}
 
 
 
@@ -187,24 +188,38 @@ salvar() {
     }
   }
 
-renovarValidade(mensalista: Mensalista) {
-  const novaValidade = new Date();
-  novaValidade.setMonth(novaValidade.getMonth() + 1);
+  renovarValidade(mensalista: Mensalista) {
+    const novaValidade = new Date();
+    novaValidade.setMonth(novaValidade.getMonth() + 1);
 
-  mensalista.validade = novaValidade.toISOString().split('T')[0];
+    mensalista.validade = novaValidade.toISOString().split('T')[0];
 
-  const hoje = new Date();
-  const diasRestantes = Math.ceil((novaValidade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
-  mensalista.status =
-    novaValidade < hoje ? 'inadimplente' :
-    diasRestantes <= 5 ? 'vencendo' : 'ativo';
+    const hoje = new Date();
+    const diasRestantes = Math.ceil((novaValidade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
+    mensalista.status =
+      novaValidade < hoje ? 'inadimplente' :
+        diasRestantes <= 5 ? 'vencendo' : 'ativo';
 
-  localStorage.setItem('mensalistas', JSON.stringify(this.mensalistas));
-  this.messageService.add({ severity: 'success', summary: 'Renovado', detail: 'Validade atualizada' });
-}
+    localStorage.setItem('mensalistas', JSON.stringify(this.mensalistas));
+    this.messageService.add({ severity: 'success', summary: 'Renovado', detail: 'Validade atualizada' });
+  }
 
+  cancelarAssinatura(event: Event, id: number) {
+    this.mensalistaSelecionado = this.mensalistas.find(v => v.id === id);
 
-
-
-
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Deseja realmente cancelar o plano mensalista?',
+      header: 'CUIDADO',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Cancelar Assinatura',
+      rejectLabel: 'Fechar',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        if (id != null) {
+          this.apagar(id);
+        }
+      }
+    });
+  }
 }

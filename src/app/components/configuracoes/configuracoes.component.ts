@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -16,7 +16,11 @@ import { FuncionariosService } from '../../services/funcionarios-service';
 import { Router } from '@angular/router';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { Empresa, TabelaPreco, TipoCobranca } from '../../models/configuracoes';
+import { Empresa } from '../../models/configuracoes';
+import { InputMaskModule } from 'primeng/inputmask';
+import { ConfiguracoesService } from '../../services/configuracoes.service';
+
+
 
 @Component({
   selector: 'app-configuracoes',
@@ -34,6 +38,8 @@ import { Empresa, TabelaPreco, TipoCobranca } from '../../models/configuracoes';
     InputTextModule,
     DropdownModule,
     InputNumberModule,
+    InputMaskModule,
+    InputNumberModule,
   ],
   templateUrl: './configuracoes.component.html',
   styleUrls: ['./configuracoes.component.scss'],
@@ -42,23 +48,11 @@ import { Empresa, TabelaPreco, TipoCobranca } from '../../models/configuracoes';
 export class ConfiguracoesComponent implements OnInit {
   dialogVisivelCadastrarFuncionario: boolean = false;
   cancelarConfiguracoes: boolean = false;
-  funcionarios: Funcionarios;
-  // configForm!: FormGroup;
 
-  constructor(
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
-    private router: Router,
-    private fb: FormBuilder,
-    // private empresa: Empresa = new Empresa(),
-  ) {
-    this.funcionarios = new Funcionarios();
-    // this.empresa = new Empresa();
-    // this.preco = new TabelaPreco();
-    // this.vagas = new Vagas();
-    // this.tipoCobranca = new TipoCobranca();
-  }
-  empresa = new Empresa();
+  funcionarios: Funcionarios = new Funcionarios();
+  empresa: Empresa = new Empresa();
+
+  qrCodeBase64: string = '';
 
   listaTurnos: ListaTurnos[] = [
     new ListaTurnos('Manhã (07h - 13h)', 'manha'),
@@ -73,40 +67,81 @@ export class ConfiguracoesComponent implements OnInit {
     new ListaStatus('Afastado', 'afastado')
   ];
 
+  constructor(
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private router: Router,
+  ) { }
+  
 
-  ngOnInit(): void {
+ngOnInit(): void {
+  const dadosSalvos = localStorage.getItem('config_empresa');
+  if (dadosSalvos) {
+    this.empresa = JSON.parse(dadosSalvos);
+    this.gerarQRCode(); // já gera o QR ao abrir se houver chave
   }
+}
+
 
   abrirModalCadastrarFuncionario() {
     this.dialogVisivelCadastrarFuncionario = true;
     this.funcionarios = new Funcionarios();
   }
 
-  salvar() { }
-  editar() { }
+SalvarConfiguracoes() {
+  console.log('Clique em Salvar funcionando!');
+  localStorage.setItem('config_empresa', JSON.stringify(this.empresa));
+  this.messageService.add({
+    severity: 'success',
+    summary: 'Configurações',
+    detail: 'Dados da empresa salvos com sucesso!'
+  });
+}
 
-  SalvarConfiguracoes() {
+
+
+
+  gerarQRCode() {
+    if (!this.empresa.pix || this.empresa.pix.trim() === '') {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Informe a chave PIX para gerar o QR Code.'
+      });
+      return;
+    }
+    const encoded = encodeURIComponent(this.empresa.pix);
+    this.qrCodeBase64 = `https://chart.googleapis.com/chart?cht=qr&chs=180x180&chl=${encoded}`;
+  }
+
+testarImpressao() {
+  if (!this.qrCodeBase64 || !this.empresa.nome) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Faltam dados',
+      detail: 'Preencha os dados da empresa e gere o QR Code antes de testar a impressão.'
+    });
+    return;
+  }
+
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    printWindow.document.write(`
+      <html>
+        <head><title>Comprovante</title></head>
+        <body style="font-family: sans-serif; padding: 20px;">
+          <h2>${this.empresa.nome}</h2>
+          <p><strong>CNPJ:</strong> ${this.empresa.cnpj}</p>
+          <p><strong>Endereço:</strong> ${this.empresa.endereco}, ${this.empresa.cidade} - ${this.empresa.estado}, ${this.empresa.cep}</p>
+          <p><strong>Forma de Pagamento:</strong> ${this.empresa.formaPagamento}</p>
+          <p><img src="${this.qrCodeBase64}" alt="QR Code Pix"></p>
+          <p><em>${this.empresa.rodape}</em></p>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
   }
 }
-// if (this.configForm.valid) {
-//   const dados = this.configForm.value;
-//   console.log('Valores da tabela de preços:', dados);
 
-//   // Simula um "salvo com sucesso"
-//   this.messageService.add({
-//     severity: 'success',
-//     summary: 'Sucesso',
-//     detail: 'Tabela de preços salva com sucesso!'
-//   });
-
-//   // Aqui você pode enviar via HTTP para o backend
-//   // this.configuracaoService.salvarPrecos(dados).subscribe(...)
-// } else {
-//   this.messageService.add({
-//     severity: 'error',
-//     summary: 'Erro',
-//     detail: 'Por favor, preencha todos os campos obrigatórios.'
-//   });
-//   }
-// }
-
+}

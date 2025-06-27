@@ -2,11 +2,20 @@
 export class Empresa {
   constructor(
     public nome: string = "",
+    public cnpj : string = "",
     public fantasia: string ="",
     public endereco: string ="",
     public cidade: string ="",
     public estado: string ="",
-    public cep: string =""
+    public cep: string ="",
+    public pix: string = "",
+    public rodape: string = "",
+    public valorHora: number = 10,
+    public valorDiaria: number = 0,
+    public valorMensalista: number = 0,
+    public arredondamento: string = '15',
+    public formaPagamento: string = 'Pix'
+
   ) {}
 }
 

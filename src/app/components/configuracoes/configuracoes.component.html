@@ -1,215 +1,99 @@
 <p-toast></p-toast>
-<p-confirmDialog></p-confirmDialog>
 
+<div class="field col-12 md:col-4">
+    <label for="valor-hora">Valor da hora (R$)</label>
+    <p-inputNumber inputId="valor-hora" [(ngModel)]="empresa.valorHora" mode="decimal" [minFractionDigits]="2"
+        class="w-full">
+    </p-inputNumber>
+</div>
 
-<div class="flex justify-content-end mb-2 p-2 gap-2">
-    <p-button (click)="abrirModalCadastrarFuncionario()" label="Novo Funcionário" />
-    <p-dialog header="Cadastro Funcionário" [modal]="true" [(visible)]="dialogVisivelCadastrarFuncionario"
-        [style]="{ width: '25rem' }">
+<div class="field col-12 md:col-4">
+    <label for="valor-diaria">Valor da diária (R$)</label>
+    <p-inputNumber inputId="valor-diaria" [(ngModel)]="empresa.valorDiaria" mode="decimal" [minFractionDigits]="2"
+        class="w-full">
+    </p-inputNumber>
+</div>
 
-        <!-- Nome  -->
-        <div class="inline-flex flex-col gap-2 p-2">
-            <label for="campo-nome" class="text-primary-50 font-semibold">Nome</label>
-            <input pInputText id="campo-nome" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
-                [(ngModel)]="funcionarios.nome" />
-        </div>
-
-        <!-- Sobrenome  -->
-        <div class="inline-flex flex-col gap-2 p-2">
-            <label for="campo-sobrenome" class="text-primary-50 font-semibold">Sobrenome</label>
-            <input pInputText id="campo-sobrenome" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
-                [(ngModel)]="funcionarios.sobrenome" />
-        </div>
-
-        <!-- CPF  -->
-        <div class="inline-flex flex-col gap-2 p-2">
-            <label for="campo-cpf" class="text-primary-50 font-semibold">CPF</label>
-            <input pInputText id="campo-cpf" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
-                [(ngModel)]="funcionarios.cpf" />
-        </div>
-
-
-        <!-- Cargo  -->
-        <div class="inline-flex flex-col gap-2 p-2">
-            <label for="campo-cargo" class="text-primary-50 font-semibold">Cargo</label>
-            <input pInputText id="campo-cargo" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
-                [(ngModel)]="funcionarios.cargo" />
-        </div>
-
-
-        <!-- Admissão  -->
-        <div class="form-group p-2">
-            <label for="campo-data-admissao">Data de Admissão</label>
-            <p-datepicker id="campo-data-admissao" [(ngModel)]="funcionarios.dataAdmissao" dateFormat="dd/mm/yy"
-                showIcon="true" appendTo="body" />
-        </div>
-
-        <!-- Status -->
-        <div class="form-group p-2">
-            <label for="campo-status">Status</label>
-            <p-dropdown id="campo-status" [options]="listaStatus" [(ngModel)]="funcionarios.listaStatus"
-                placeholder="Selecione o status" appendTo="body">
-            </p-dropdown>
-        </div>
-
-        <!-- Turno -->
-        <div class="form-group ">
-            <label for="campo-turno">Turno</label>
-            <p-dropdown id="campo-turno" [options]="listaTurnos" [(ngModel)]="funcionarios.turno"
-                placeholder="Selecione o turno" appendTo="body">
-            </p-dropdown>
-        </div>
-        <!-- Telefone  -->
-        <div class="inline-flex flex-col gap-2 p-2">
-            <label for="campo-telefone" class="text-primary-50 font-semibold">Telefone</label>
-            <input pInputText id="campo-telefone" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
-                [(ngModel)]="funcionarios.telefone" />
-        </div>
-
-
-
-        <div class="flex items-center gap-4">
-            <!-- Cancelar  -->
-            <!-- Salvar  -->
-            <p-button label="Salvar" (click)="salvar()" [text]="true"
-                styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
-                class="w-full"></p-button>
-            <!-- Editar -->
-            <p-button label="Editar" (click)="editar()" [text]="true"
-                styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
-                class="w-full"></p-button>
-            <p-button label="Cancelar" (click)="dialogVisivelCadastrarFuncionario = false" [text]="true"
-                styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
-                class="w-full "></p-button>
-        </div>
-    </p-dialog>
+<div class="field col-12 md:col-4">
+    <label for="valor-mensalista">Valor mensalista (R$)</label>
+    <p-inputNumber inputId="valor-mensalista" [(ngModel)]="empresa.valorMensalista" mode="decimal"
+        [minFractionDigits]="2" class="w-full">
+    </p-inputNumber>
 </div>
 
 
-
-
-
-<div class="formgrid grid">
-    <!-- Dados da empresa -->
-    <div class="field col-12 md:col-6">
-        <label for="nome-empresa">Nome da empresa</label>
-        <input id="nome-empresa" type="text"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="nome-fantasia">Nome Fantasia</label>
-        <input id="nome-fantasia" type="text"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12">
-        <label for="endereco">Endereço</label>
-        <textarea id="endereco" rows="4"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="cidade">Cidade</label>
-        <input id="cidade" type="text"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-3">
-        <label for="estado">Estado</label>
-        <select id="estado"
-            class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
-            style="appearance: auto">
-            <option>Blumenau</option>
-            <option>Gaspar</option>
-            <option>Ilhota</option>
-            <option>Brusque</option>
-            <option>Timbó</option>
-        </select>
-    </div>
-    <div class="field col-12 md:col-3">
-        <label for="cep">CEP</label>
-        <input id="cep" type="text"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-
-    <!-- Tipo de cobrança -->
-    <div class="field col-12">
-        <!-- <label>Tipo de cobrança</label>
-        <div class="flex flex-column gap-2">
-            <div><input type="checkbox" id="por-hora"><label for="por-hora" class="ml-2">Por hora</label></div>
-            <div><input type="checkbox" id="por-fracao"><label for="por-fracao" class="ml-2">Por fração de 15/30 minutos</label></div>
-            <div><input type="checkbox" id="diaria"><label for="diaria" class="ml-2">Diária</label></div>
-        </div> -->
-    </div>
-
-    <!-- Tabelas de Preço -->
-    <div class="field col-12">
-        <label>Cadastro de Tabelas de Preço (R$)</label>
-    </div>
-    <div class="field col-12 md:col-3">
-        <label for="valor-base">Valor base da hora/fração (R$)</label>
-        <input id="valor-base" type="number" step="0.1"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-3">
-        <label for="preco-carro">Carros - Hora ($)</label>
-        <input id="preco-carro" type="number" step="0.1"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-3">
-        <label for="preco-moto">Motos - Hora ($)</label>
-        <input id="preco-moto" type="number" step="0.1"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-3">
-        <label for="preco-caminhonete">Caminhonetes - Hora ($)</label>
-        <input id="preco-caminhonete" type="number" step="0.1"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-3">
-        <label for="preco-mensalista">Mensalistas - Mês ($) </label>
-        <input id="preco-mensalista" type="number" step="0.1"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-
-    <!-- Configuração de Vagas -->
-    <div class="field col-12">
-        <label>Configuração de Vagas</label>
-    </div>
-    <div class="field col-12 md:col-4">
-        <label for="vagas-total">Quantidade total de vagas</label>
-        <input id="vagas-total" type="number"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-4">
-        <label for="vagas-carro">Vagas para Carros/Caminhonetes</label>
-        <input id="vagas-carro" type="number"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-4">
-        <label for="vagas-moto">Vagas para Motos</label>
-        <input id="vagas-moto" type="number"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="vagas-especiais">Vagas para Deficientes / Idosos</label>
-        <input id="vagas-especiais" type="number"
-            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-    </div>
+<div class="field col-12 md:col-6">
+    <label for="arredondamento">Tipo de arredondamento</label>
+    <select id="arredondamento" class="input-dark w-full" [(ngModel)]="empresa.arredondamento">
+        <option value="15">15 minutos</option>
+        <option value="30">30 minutos</option>
+    </select>
 </div>
 
-
-<div class="flex justify-content-center flex-wrap">
-    <!-- Cancelar  -->
-    <div class="flex align-items-center justify-content-center w-4rem h-4rem  border-round m-2">
-
-        <p-button label="Cancelar" (click)="cancelarConfiguracoes = false" [text]="true"
-            styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
-            class="w-full "></p-button>
-    </div>
-    <!-- Salvar  -->
-    <div class="flex align-items-center justify-content-center w-4rem h-4rem  border-round m-2">
-        <p-button label="Salvar" (click)="salvar()" [text]="true"
-            styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
-            class="w-full"></p-button>
-    </div>
+<div class="field col-12 md:col-6">
+    <label for="forma-pagamento">Forma padrão de pagamento</label>
+    <select id="forma-pagamento" class="input-dark w-full" [(ngModel)]="empresa.formaPagamento">
+        <option value="Pix">Pix</option>
+        <option value="Cartao">Cartão</option>
+        <option value="Dinheiro">Dinheiro</option>
+    </select>
 </div>
-<!-- </p-dialog> -->
-<!-- </div> -->
+
+<div class="col-12 border-top-1 border-gray-700 pt-4 mt-4">
+    <h4 class="text-lg mb-3">Dados para Nota Fiscal / Comprovante</h4>
+</div>
+
+<div class="field col-12 md:col-6">
+    <label for="nome-empresa">Nome da empresa</label>
+    <input pInputText id="nome-empresa" type="text" class="input-dark w-full" [(ngModel)]="empresa.nome" />
+</div>
+
+<div class="field col-12 md:col-6">
+    <label for="cnpj">CNPJ</label>
+    <input pInputMask mask="99.999.999/9999-99" id="cnpj" type="text" class="input-dark w-full"
+        [(ngModel)]="empresa.cnpj" />
+</div>
+
+<div class="field col-12">
+    <label for="endereco">Endereço completo</label>
+    <input pInputText id="endereco" type="text" class="input-dark w-full" [(ngModel)]="empresa.endereco" />
+</div>
+
+<div class="field col-6 md:col-3">
+    <label for="cidade">Cidade</label>
+    <input pInputText id="cidade" type="text" class="input-dark w-full" [(ngModel)]="empresa.cidade" />
+</div>
+
+<div class="field col-3 md:col-2">
+    <label for="estado">Estado</label>
+    <input pInputText id="estado" type="text" maxlength="2" class="input-dark w-full" [(ngModel)]="empresa.estado" />
+</div>
+
+<div class="field col-3 md:col-2">
+    <label for="cep">CEP</label>
+    <input pInputMask mask="99999-999" id="cep" type="text" class="input-dark w-full" [(ngModel)]="empresa.cep" />
+</div>
+
+<div class="field col-12">
+    <label for="observacoes">Observações do rodapé</label>
+    <textarea id="observacoes" rows="3" class="input-dark w-full" [(ngModel)]="empresa.rodape"></textarea>
+</div>
+
+<div class="col-12 border-top-1 border-gray-700 pt-4 mt-4">
+    <h4 class="text-lg mb-3">QR Code para Pagamento</h4>
+</div>
+
+<div class="field col-12 md:col-6">
+    <label for="chave-pix">Chave Pix</label>
+    <input pInputText id="chave-pix" type="text" class="input-dark w-full" [(ngModel)]="empresa.pix" />
+</div>
+
+<div class="field col-12 md:col-6 flex align-items-center justify-content-center">
+    <img [src]="qrCodeBase64" alt="QR Code" />
+</div>
+
+<div class="col-12 flex justify-content-end gap-2 pt-4">
+    <p-button label="Salvar Configurações" (click)="SalvarConfiguracoes()" icon="pi pi-save"></p-button>
+    <p-button label="Testar Impressão de Comprovante" (click)="testarImpressao()" icon="pi pi-print"
+        class="p-button-secondary"></p-button>
+</div>
