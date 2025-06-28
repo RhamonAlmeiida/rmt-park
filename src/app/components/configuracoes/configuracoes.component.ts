@@ -10,17 +10,16 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputMaskModule } from 'primeng/inputmask';
+
 import { ListaStatus, ListaTurnos } from '../../models/lista-turnos';
 import { Funcionarios } from '../../models/funcionarios';
 import { FuncionariosService } from '../../services/funcionarios-service';
 import { Router } from '@angular/router';
-import { DatePickerModule } from 'primeng/datepicker';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { Empresa } from '../../models/configuracoes';
-import { InputMaskModule } from 'primeng/inputmask';
 import { ConfiguracoesService } from '../../services/configuracoes.service';
-
-
 
 @Component({
   selector: 'app-configuracoes',
@@ -38,8 +37,7 @@ import { ConfiguracoesService } from '../../services/configuracoes.service';
     InputTextModule,
     DropdownModule,
     InputNumberModule,
-    InputMaskModule,
-    InputNumberModule,
+    InputMaskModule
   ],
   templateUrl: './configuracoes.component.html',
   styleUrls: ['./configuracoes.component.scss'],
@@ -51,7 +49,6 @@ export class ConfiguracoesComponent implements OnInit {
 
   funcionarios: Funcionarios = new Funcionarios();
   empresa: Empresa = new Empresa();
-
   qrCodeBase64: string = '';
 
   listaTurnos: ListaTurnos[] = [
@@ -71,35 +68,31 @@ export class ConfiguracoesComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private router: Router,
-  ) { }
-  
+    private configuracoesService: ConfiguracoesService
+  ) {}
 
-ngOnInit(): void {
-  const dadosSalvos = localStorage.getItem('config_empresa');
-  if (dadosSalvos) {
-    this.empresa = JSON.parse(dadosSalvos);
-    this.gerarQRCode(); // já gera o QR ao abrir se houver chave
+  ngOnInit(): void {
+    const dadosSalvos = localStorage.getItem('config_empresa');
+    if (dadosSalvos) {
+      this.empresa = JSON.parse(dadosSalvos);
+      this.gerarQRCode(); // Gera QR automaticamente se chave Pix existir
+    }
   }
-}
-
 
   abrirModalCadastrarFuncionario() {
     this.dialogVisivelCadastrarFuncionario = true;
     this.funcionarios = new Funcionarios();
   }
 
-SalvarConfiguracoes() {
-  console.log('Clique em Salvar funcionando!');
-  localStorage.setItem('config_empresa', JSON.stringify(this.empresa));
-  this.messageService.add({
-    severity: 'success',
-    summary: 'Configurações',
-    detail: 'Dados da empresa salvos com sucesso!'
-  });
-}
+  SalvarConfiguracoes() {
+    localStorage.setItem('config_empresa', JSON.stringify(this.empresa));
 
-
-
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Configurações',
+      detail: 'Dados da empresa salvos com sucesso!'
+    });
+  }
 
   gerarQRCode() {
     if (!this.empresa.pix || this.empresa.pix.trim() === '') {
@@ -110,38 +103,38 @@ SalvarConfiguracoes() {
       });
       return;
     }
+
     const encoded = encodeURIComponent(this.empresa.pix);
     this.qrCodeBase64 = `https://chart.googleapis.com/chart?cht=qr&chs=180x180&chl=${encoded}`;
   }
 
-testarImpressao() {
-  if (!this.qrCodeBase64 || !this.empresa.nome) {
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Faltam dados',
-      detail: 'Preencha os dados da empresa e gere o QR Code antes de testar a impressão.'
-    });
-    return;
-  }
+  testarImpressao() {
+    if (!this.qrCodeBase64 || !this.empresa.nome) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Faltam dados',
+        detail: 'Preencha os dados da empresa e gere o QR Code antes de testar a impressão.'
+      });
+      return;
+    }
 
-  const printWindow = window.open('', '_blank');
-  if (printWindow) {
-    printWindow.document.write(`
-      <html>
-        <head><title>Comprovante</title></head>
-        <body style="font-family: sans-serif; padding: 20px;">
-          <h2>${this.empresa.nome}</h2>
-          <p><strong>CNPJ:</strong> ${this.empresa.cnpj}</p>
-          <p><strong>Endereço:</strong> ${this.empresa.endereco}, ${this.empresa.cidade} - ${this.empresa.estado}, ${this.empresa.cep}</p>
-          <p><strong>Forma de Pagamento:</strong> ${this.empresa.formaPagamento}</p>
-          <p><img src="${this.qrCodeBase64}" alt="QR Code Pix"></p>
-          <p><em>${this.empresa.rodape}</em></p>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head><title>Comprovante</title></head>
+          <body style="font-family: sans-serif; padding: 20px;">
+            <h2>${this.empresa.nome}</h2>
+            <p><strong>CNPJ:</strong> ${this.empresa.cnpj}</p>
+            <p><strong>Endereço:</strong> ${this.empresa.endereco}, ${this.empresa.cidade} - ${this.empresa.estado}, ${this.empresa.cep}</p>
+            <p><strong>Forma de Pagamento:</strong> ${this.empresa.formaPagamento}</p>
+            <p><img src="${this.qrCodeBase64}" alt="QR Code Pix"></p>
+            <p><em>${this.empresa.rodape}</em></p>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.print();
+    }
   }
-}
-
 }
