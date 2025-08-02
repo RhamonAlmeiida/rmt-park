@@ -95,6 +95,25 @@
   </div>
 </section>
 
+<section class="blog-section">
+  <div class="blog-header">
+    <span class="blog-tag"><i class="pi pi-book"></i> Blog</span>
+    <a class="blog-ver-mais" routerLink="/blog">Ver mais</a>
+  </div>
+  <h2 class="blog-title">Fique por dentro!</h2>
+
+  <div class="blog-cards">
+    <div class="blog-card" *ngFor="let post of posts">
+      <img [src]="post.imagem" alt="Imagem do post" class="blog-img" />
+      <div class="blog-overlay">
+        <p class="blog-categoria">Sem categoria</p>
+        <p class="blog-info">{{ post.tempoLeitura }} • {{ post.data }}</p>
+      </div>
+      <h3 class="blog-post-titulo">{{ post.titulo }}</h3>
+      <p class="blog-post-resumo">{{ post.resumo }}</p>
+    </div>
+  </div>
+</section>
 
   
   <section class="cta">
@@ -120,7 +139,7 @@
         <h5>Produtos</h5>
         <ul>
           <li>Controle de Acesso</li>
-          <li>Robôs</li>
+          <li>Relatórios</li>
           <li>Mensalistas</li>
           <li>Diaristas</li>
           <li>Comprovantes</li>
