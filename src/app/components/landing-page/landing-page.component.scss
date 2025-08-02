@@ -1,0 +1,388 @@
+@import "primeicons/primeicons.css";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #ecfdf5;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.1;
+  color: #1a1a1a;
+  background-color: #fff;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+}
+.container h1{
+  margin-left: 100px;
+}
+
+.navbar {
+  background: #fdfffb;
+  border-bottom: 1px solid #f7eeee;
+  
+}
+
+.rmt {
+  color: #000;
+  font-weight: bold;
+}
+
+.park {
+  color: #22d493;
+  font-weight: bold;
+}
+.menu{
+  margin-right: 320px;
+}
+
+.menu a {
+  margin-left: 100px;
+  font-weight: 500;
+}
+.btn-login{
+  margin-right: 100px;
+  padding: 10px 20px;
+}
+
+.btn-entrar {
+  background: #3cbc8d;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.btn-entrar:hover {
+  background: #32a37b;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  padding: 80px 20px;
+  background-attachment: fixed;
+  background:  #fdfffd; ;
+  
+}
+
+.hero .hero-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+.hero h2 {
+  font-size: 6rem;
+  color: #000;
+  margin-bottom: 0.5rem;
+  text-align: width;
+}
+
+.hero .subtitle {
+  color: #444;
+  max-width: 700px;
+  text-align: left;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hero .btn-vendas {
+  margin-top: 2rem;
+  background: #3cbc8d;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: inline-block;
+  transition: background 0.3s;
+}
+
+.hero .btn-vendas:hover {
+  background: #32a37b;
+}
+
+.hero-image {
+  margin-bottom: 50px; 
+  width: 800px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  border-radius: 20px;
+}
+
+.badge {
+  font-weight: 80px;
+  color: #04faa0;
+  background-color: #111311ec;
+  margin-bottom: 0rem;
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #04f89f;
+  border-radius: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  margin-top: 8px;
+  margin-left: 50px;
+}
+
+.badge i {
+  color: #14e4a2ff;
+  font-size: 1rem;
+}
+
+.vantagens {
+  display: flex;
+  justify-content: space-around;
+  padding: 60px 20px;
+  background: #0f1110c9;
+  text-align: center;
+}
+
+.vantagem h3 {
+  color:  #04f89f;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.planos {
+  padding: 60px 20px;
+  background: #fff;
+  text-align: center;
+}
+
+.plano {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.plano.personalizado button {
+  background-color: #3cbc8d;
+  color: white;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 6px;
+}
+
+.cta {
+  background-color: #f0eaea7e;
+  padding: 4rem 2rem;
+  display: flex;
+  justify-content: center;
+  
+}
+.badge-gestao {
+  font-weight: 80px;
+  color: #41a17e;
+  background-color: #3cbc8d;
+  margin-bottom: 0rem;
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #3cbc8d;
+  border-radius: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  margin-top: 8px;
+  margin-left: 50px;
+}
+
+.badge-gestao i {
+  color: rgb(30, 82, 65);
+  font-size: 1rem;
+}
+.cta-hero{
+  margin-left: 50px;
+  margin-bottom: 50px;
+}
+.hero-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-left: 20px;
+}
+.hero-image2{
+  width: 400px;
+  border-radius: 0;
+  height: auto;
+}
+.cta h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #3cbc8d;
+}
+.cta p , strong{
+  color: #000;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.btn-cta {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #3cbc8d;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-cta:hover {
+  background-color: #32a37b;
+}
+
+.rodape {
+  background-color: #111;
+  color: white;
+  padding: 40px 20px;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-container div {
+  margin: 20px;
+}
+
+.footer-container h5 {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.footer-container ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.footer-brand i {
+  margin-right: 8px;
+}
+
+.footer-brand p {
+  margin-top: 8px;
+}
+
+.copyright {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  text-align: center;
+}
+.planos {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: #f5f5f5;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.planos h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #93bbac;
+}
+
+.container-planos {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.plano {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.plano:hover {
+  transform: translateY(-10px);
+}
+
+.plano h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  color: #87f095;
+}
+
+.plano .preco {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.plano .preco span {
+  font-size: 1rem;
+  color: #666;
+}
+
+.plano ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 1.5rem;
+}
+
+.plano ul li {
+  margin: 0.5rem 0;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.plano button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.plano button:hover {
+  background-color: #000;
+}
+
+/* Cores personalizadas por plano */
+.plano-basic {
+  border-top: 5px solid #3498db;
+}
+
+.plano-standard {
+  border-top: 5px solid #e74c3c;
+}
+
+.plano-premium {
+  border-top: 5px solid #27ae60;
+}
+
+/* Destaque para o plano central */
+.destaque {
+  transform: scale(1.05);
+  z-index: 1;
+  background-color: #fff5f5;
+}

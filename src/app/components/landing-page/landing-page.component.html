@@ -1,0 +1,153 @@
+<p-toast></p-toast>
+<router-outlet></router-outlet>
+
+<body>
+  
+  <header class="navbar">
+    <div class="container">
+      <h1> <span class="rmt">Rmt</span><span class="park">Park</span></h1>
+      <nav class="menu">
+        <a routerLink="/solucoes">Soluções</a>
+        <a routerLink="/planos">Planos e Preços</a>
+        <a routerLink="/sobre">Sobre Nós</a>
+        <a routerLink="/contato">Contato</a>
+      </nav>
+      <p-button label="Login" class="btn-login" (click)="direcionarLogin()"></p-button>
+      
+    </div>
+  </header>
+  
+ <p class="badge"> <i class="pi pi-star-fill"></i> Somos a RmtPark</p>
+
+  
+<section class="hero">
+  <div class="hero-text">
+    <h2>Gerencie seu estacionamento com facilidade</h2>
+    <p class="subtitle">Sistema completo para controle de entrada, saída, relatórios e planos personalizados.</p>
+    <button class="btn-primary"  class="btn-vendas" >Comece Agora</button>
+  </div>
+  <div class="hero-image">
+    <img src="assets/telainicial.png" alt="Mockup do app" class="hero-image" />
+ </div>
+</section>
+
+
+<section class="vantagens">
+  <div class="vantagem">
+    <div class="icon-container">
+      <i class="pi pi-users"></i>
+    </div>
+    <h3>Mais clientes, mais receita</h3>
+    <p>Atraia motoristas e aumente a ocupação com reservas e marketplace.</p>
+  </div>
+  <div class="vantagem">
+    <div class="icon-container" >
+      <i class="pi pi-cloud"></i>
+    </div>
+    <h3>Gestão sem complicação</h3>
+    <p>Controle tudo em tempo real com uma plataforma 100% independente.</p>
+  </div>
+  <div class="vantagem">
+    <div class="icon-container">
+      <i class="pi pi-credit-card"></i>
+    </div>
+    <h3>Redução de custos na operação</h3>
+    <p>Automação e pagamentos digitais para cortar gastos e maximizar lucros.</p>
+  </div>
+</section>
+
+  
+<section class="planos">
+  <h2>Escolha o seu plano</h2>
+  <div class="container-planos">
+    <div class="plano plano-basic">
+      <h3>Basic</h3>
+      <div class="preco">R$ 120<span>/mês</span></div>
+      <ul>
+        <li>Controle de vagas</li>
+        <li>Suporte básico</li>
+        <li>Relatórios simples</li>
+      </ul>
+      <button>Comprar</button>
+    </div>
+
+    <div class="plano plano-standard destaque">
+      <h3>Standard</h3>
+      <div class="preco">R$ 290<span>/mês</span></div>
+      <ul>
+        <li>Controle avançado</li>
+        <li>Suporte completo</li>
+        <li>Relatórios avançados</li>
+      </ul>
+      <button>Comprar</button>
+    </div>
+
+    <div class="plano plano-premium">
+      <h3>Premium</h3>
+      <div class="preco">Sob consulta</div>
+      <ul>
+        <li><i class="fas fa-check-circle"></i> Gestão inteligente</li>
+        <li><i class="fas fa-check-circle"></i> Integração com sistemas</li>
+        <li><i class="fas fa-check-circle"></i> Suporte prioritário</li>
+      </ul>
+      <button>Entre em contato</button>
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="cta">
+  <div class="hero-container">
+    <img src="assets/telafinal.jpg" alt="Mockup do app" class="hero-image2" />
+ </div>
+ <div class="cta-hero">
+  <p class="badge-gestao"> <i class="pi pi-chart-line"></i> Gestão Inteligente</p>
+    <h3>Transforme sua operação agora</h3>
+    <p>Mais controle, mais receita e menos custos. Digitalize seu estacionamento e <br><strong>simplifique a gestão.</strong></p>
+    <a href="#" class="btn-cta">Comece agora sem compromisso   <i class="pi pi-arrow-right"></i></a>
+ </div>
+</section>
+  
+  <footer class="rodape">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4>RmtPark</h4>
+        <p><i class="fab fa-facebook"></i> <i class="fas fa-envelope"></i></p>
+        <p>contatocom</p>
+      </div>
+      <div>
+        <h5>Produtos</h5>
+        <ul>
+          <li>Controle de Acesso</li>
+          <li>Robôs</li>
+          <li>Mensalistas</li>
+          <li>Diaristas</li>
+          <li>Comprovantes</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Segmentos</h5>
+        <ul>
+          <li>Estacionamentos</li>
+          <li>Hospitais</li>
+          <li>Hotéis</li>
+          <li>Shoppings</li>
+          <li>Eventos</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Institucional</h5>
+        <ul>
+          <li>Sobre nós</li>
+          <li>Política de Privacidade</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      © 2025 RmtPark. Todos os direitos reservados. CNPJ 05.003.009 / 2001-00
+    </div>
+  </footer>
+  
+  
+</body>

@@ -7,7 +7,7 @@ import { MessageModule } from 'primeng/message';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
-import { LoginService } from '../../services/login.service';  // ← importar o serviço corretamente
+import { LoginService } from '../../services/login.service'; 
 
 @Component({
   selector: 'app-login',
@@ -20,11 +20,11 @@ import { LoginService } from '../../services/login.service';  // ← importar o 
     DialogModule,
     ButtonModule
   ],
-  providers: [ConfirmationService, MessageService /* , LoginService se quiser sobrescrever */],
+  providers: [ConfirmationService, MessageService ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {  // ← PascalCase
+export class LoginComponent { 
   email = '';
   senha = '';
   dialogModalEsqueceuSenha = false;
@@ -32,7 +32,7 @@ export class LoginComponent {  // ← PascalCase
   carregandoRecuperacao = false;
 
   constructor(
-    private loginService: LoginService,    // ← usar LoginService
+    private loginService: LoginService,    
     private router: Router,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,

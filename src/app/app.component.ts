@@ -23,7 +23,8 @@ export class AppComponent implements OnInit {
 
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .subscribe((event) => {
+        console.log('Rota atual:' , this.router.url);
         this.atualizarStatusUsuario();
       });
   }
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit {
   atualizarStatusUsuario() {
     const estaLogado = !!localStorage.getItem('usuarioLogado');
     const rotaAtual = this.router.url;
-    this.usuarioLogado = estaLogado && rotaAtual !== '/login';
+    this.usuarioLogado = estaLogado && rotaAtual !== '/' && rotaAtual !== '/login';
   }
 
   redirecionarHome() {
