@@ -1,0 +1,144 @@
+@import "primeicons/primeicons.css";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #ecfdf5;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.1;
+  color: #1a1a1a;
+  background-color: #fff;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+}
+.container h1{
+  margin-left: 100px;
+}
+
+.navbar {
+  background: #fdfffb;
+  border-bottom: 1px solid #f7eeee;
+  
+}
+
+.rmt {
+  color: #000;
+  font-weight: bold;
+}
+
+.park {
+  color: #22d493;
+  font-weight: bold;
+}
+.menu{
+  margin-right: 320px;
+}
+
+.menu a {
+  margin-left: 100px;
+  font-weight: 500;
+}
+.btn-login{
+  margin-right: 100px;
+  padding: 10px 20px;
+}
+
+.btn-entrar {
+  background: #3cbc8d;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.btn-entrar:hover {
+  background: #32a37b;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  padding: 80px 20px;
+  background-attachment: fixed;
+  background:  #fdfffd; ;
+  
+}
+
+.hero .hero-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+.hero h2 {
+  font-size: 6rem;
+  color: #000;
+  margin-bottom: 0.5rem;
+  text-align: width;
+}
+
+.hero .subtitle {
+  color: #444;
+  max-width: 700px;
+  text-align: left;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hero .btn-vendas {
+  margin-top: 2rem;
+  background: #3cbc8d;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: inline-block;
+  transition: background 0.3s;
+}
+
+.hero .btn-vendas:hover {
+  background: #32a37b;
+}
+
+.hero-image {
+  margin-bottom: 50px; 
+  width: 800px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  border-radius: 20px;
+}
+
+.badge {
+  font-weight: 80px;
+  color: #161817;
+  background-color: #04f89f;
+  margin-bottom: 0rem;
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #04f89f;
+  border-radius: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  margin-top: 8px;
+  margin-left: 50px;
+}
+
+.badge i {
+  color: rgb(8, 8, 8);
+  font-size: 1rem;
+}

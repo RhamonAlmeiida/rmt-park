@@ -1,0 +1,19 @@
+<p-toast></p-toast>
+<router-outlet></router-outlet>
+
+<body>
+  
+  <header class="navbar">
+    <div class="container">
+      <h1> <span class="rmt">Rmt</span><span class="park">Park</span></h1>
+      <nav class="menu">
+        <a routerLink="/solucoes">Soluções</a>
+        <a routerLink="/planos">Planos e Preços</a>
+        <a routerLink="/sobre">Sobre Nós</a>
+        <a routerLink="/contato">Contato</a>
+      </nav>
+      <p-button class="btn-cta" label="Voltar ao site" (click)="voltarPagina()" icon="pi pi-arrow-right"></p-button>
+    </div>
+  </header>
+  
+ <p class="badge"> <i class="pi pi-book"></i> BLOG</p>

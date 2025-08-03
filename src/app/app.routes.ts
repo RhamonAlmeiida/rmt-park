@@ -7,10 +7,12 @@ import { RelatorioComponent } from './components/relatorios/relatorios.component
 import { authGuard } from './auth.guard';
 import { LoginComponent } from './components/login/login.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component'; 
+import { BlogComponent } from './components/blog/blog.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent }, 
   { path: 'login', component: LoginComponent }, 
+  { path: 'blog' , component: BlogComponent},
   { path: 'vagas', component: VagaListaComponent, canActivate: [authGuard] },
   { path: 'vagas/cadastro', component: VagaCadastroComponent, canActivate: [authGuard] },
   { path: 'mensalistas', component: MensalistasComponent, canActivate: [authGuard] },

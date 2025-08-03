@@ -68,6 +68,10 @@ export class LandingPageComponent implements OnInit {
     this.router.navigate(['/login'])
     
   }
+    direcionarblog(){
+    this.router.navigate(['/blog'])
+    
+  }
 
 
 }

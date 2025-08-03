@@ -304,8 +304,8 @@ export class VagaListaComponent implements OnInit {
 
     this.messageService.add({
       severity: 'success',
-      summary: 'Relatório salvo localmente',
-      detail: 'Salvo no navegador (localStorage).'
+      summary: 'Relatório armazenado',
+      detail: 'Salvo'
     });
   }
 
